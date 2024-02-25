@@ -1,5 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 
 export const nameTag = (
-    tag: string
-) => `${pulumi.getProject()}_${pulumi.getStack()}_${tag}`
+    tag: string,
+    version: number
+) => `${pulumi.getProject()}_${pulumi.getStack()}_${tag}_v${version}`
