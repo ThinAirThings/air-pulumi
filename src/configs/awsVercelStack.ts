@@ -6,7 +6,7 @@ import { DynamoTableFactory } from "../components/DynamoTableFactory";
 export const configAirPulumi = () => {
     // Create IAM User
     const iamUser = new aws.iam.User(createNameTag('iamUser'), {
-        path: `/${pulumi.getProject()}/${pulumi.getStack()}/application`
+        path: `/${pulumi.getProject()}/${pulumi.getStack()}/application/`
     })
     // Create Access Key
     const accessKey = new aws.iam.AccessKey(createNameTag('accessKey'), {
