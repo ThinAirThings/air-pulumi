@@ -39,7 +39,7 @@ export const DynamoTableFactory = (applicationIamUser: aws.iam.User) =>({
     // Set Permissions
     new aws.iam.UserPolicyAttachment(`${nameTag}_policy_attachment`, {
         user: applicationIamUser.name,
-        policyArn: new aws.iam.Policy(`${tag}_policy`, {
+        policyArn: new aws.iam.Policy(`${nameTag}_policy`, {
             policy: table.arn.apply(arn => JSON.stringify({
                 Version: "2012-10-17",
                 Statement: [{
