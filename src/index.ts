@@ -1,1 +1,1 @@
-export { nameTag } from "./utils.nameTag";
+export { createNameTag } from "./utils.nameTag";
