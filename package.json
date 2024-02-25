@@ -24,7 +24,8 @@
         "typescript": "~5.2.2"
     },
     "peerDependencies": {
-        "@pulumi/pulumi": "^3.103.1"
+        "@pulumi/pulumi": "^3.103.1",
+        "@pulumi/aws": "^6.0.0"
     },
     "keywords": [],
     "author": "Dan Lannan",
