@@ -1,0 +1,34 @@
+{
+    "name": "@thinairthings/air-pulumi",
+    "version": "0.1.0",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsup",
+        "npmpub": "npm run build && git add . && git commit -m \"mod\" && git push && npm version patch && npm publish"
+    },
+    "files": [
+        "dist"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ThinAirThings/air-pulumi.git"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com/",
+        "access": "restricted"
+    },
+    "devDependencies": {
+        "@types/node": "20.6.3",
+        "tsup": "^7.2.0",
+        "typescript": "~5.2.2"
+    },
+    "peerDependencies": {
+        "@pulumi/pulumi": "^3.103.1"
+    },
+    "keywords": [],
+    "author": "Dan Lannan",
+    "dependencies": {
+
+    }
+}
