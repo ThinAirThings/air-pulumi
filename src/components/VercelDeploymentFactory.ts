@@ -20,7 +20,7 @@ export const VercelDeploymentFactory = (
     }[]
 }) => {
     // Create nametag
-    const nameTag = createNameTag(tag)
+    const nameTag = createNameTag(tag).replaceAll("_", "-")
     // Create Pulumi Provider
     const provider = new vercel.Provider(`${nameTag}_provider`, {
         apiToken: apiToken,
