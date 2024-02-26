@@ -27,19 +27,19 @@ export const PublicBucket = ({
         ignorePublicAcls: false,
         restrictPublicBuckets: false,
     })
-    new aws.s3.BucketPolicy(`${nameTag}_policy`, {
-        bucket: bucket.id,
-        policy: pulumi.jsonStringify({
-            Version: "2012-10-17",
-            Statement: [{
-                Sid: "PublicReadGetObject",
-                Action: ["s3:GetObject"],
-                Effect: "Allow",
-                Resource: pulumi.interpolate`${bucket.arn}/*`,
-                Principal: "*",
-            }],
-        }),
-    })
+    // new aws.s3.BucketPolicy(`${nameTag}_policy`, {
+    //     bucket: bucket.id,
+    //     policy: pulumi.jsonStringify({
+    //         Version: "2012-10-17",
+    //         Statement: [{
+    //             Sid: "PublicReadGetObject",
+    //             Action: ["s3:GetObject"],
+    //             Effect: "Allow",
+    //             Resource: pulumi.interpolate`${bucket.arn}/*`,
+    //             Principal: "*",
+    //         }],
+    //     }),
+    // })
     // Add resources to expose
     if (resourceDirectoryPath) {
         fs.readdirSync(resourceDirectoryPath).forEach(file => {
