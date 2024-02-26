@@ -8,10 +8,12 @@ export const VercelDeploymentFactory = (
 ) => ({
     tag,
     githubRepo,
+    apiToken,
     environmentVariables,
 }: {
     tag: string,
     githubRepo: string,
+    apiToken: pulumi.Output<string>,
     environmentVariables?: {
         key: string
         value: string
@@ -19,6 +21,11 @@ export const VercelDeploymentFactory = (
 }) => {
     // Create nametag
     const nameTag = createNameTag(tag)
+    // Create Pulumi Provider
+    const provider = new vercel.Provider(`${nameTag}_provider`, {
+        apiToken: apiToken,
+        team: new pulumi.Config('vercel').require("team")
+    });
     // Project Setup
     const project = new vercel.Project(`${nameTag}_project`, {
         name: nameTag,
