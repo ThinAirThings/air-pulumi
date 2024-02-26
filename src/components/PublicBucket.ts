@@ -6,7 +6,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { createNameTag } from "../utils/createNameTag";
 
-export const PublicBucket = () => ({
+export const PublicBucket = ({
     tag,
     version,
     resourceDirectoryPath,
