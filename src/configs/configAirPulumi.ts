@@ -17,6 +17,6 @@ export const configAirPulumi = () => {
         iamUser,
         accessKey,
         DynamoTable: DynamoTableFactory(iamUser),
-        VerceDeployment: VercelDeploymentFactory(accessKey)
+        VercelDeployment: VercelDeploymentFactory(accessKey)
     }
 }
