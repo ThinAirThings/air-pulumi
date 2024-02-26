@@ -2,6 +2,7 @@ import { createNameTag } from "../utils/createNameTag"
 import * as aws from "@pulumi/aws";
 import * as pulumi from "@pulumi/pulumi";
 import { DynamoTableFactory } from "../components/DynamoTableFactory";
+import { VercelDeploymentFactory } from "../components/VercelDeploymentFactory";
 
 export const configAirPulumi = () => {
     // Create IAM User
@@ -15,6 +16,7 @@ export const configAirPulumi = () => {
     return {
         iamUser,
         accessKey,
-        DynamoTable: DynamoTableFactory(iamUser)
+        DynamoTable: DynamoTableFactory(iamUser),
+        VerceDeployment: VercelDeploymentFactory(accessKey)
     }
 }

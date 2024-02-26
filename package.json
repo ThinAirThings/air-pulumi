@@ -25,7 +25,8 @@
     },
     "peerDependencies": {
         "@pulumi/pulumi": "^3.103.1",
-        "@pulumi/aws": "^6.0.0"
+        "@pulumi/aws": "^6.0.0",
+        "@pulumiverse/vercel": "^1.0.1"
     },
     "keywords": [],
     "author": "Dan Lannan",

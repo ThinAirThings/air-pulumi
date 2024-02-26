@@ -1,4 +1,4 @@
-export { configAirPulumi } from "./configs/awsVercelStack";
+export { configAirPulumi } from "./configs/configAirPulumi";
 export { createNameTag } from "./utils/createNameTag";
 
 // Public Components
