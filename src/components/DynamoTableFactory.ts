@@ -1,5 +1,6 @@
 import * as aws from "@pulumi/aws";
 import { createNameTag } from "../utils/createNameTag";
+import { Output } from "@pulumi/pulumi";
 
 
 export const DynamoTableFactory = (applicationIamUser: aws.iam.User) =>({
@@ -14,7 +15,7 @@ export const DynamoTableFactory = (applicationIamUser: aws.iam.User) =>({
     version: number,
     hashKey: string,
     rangeKey?: string,
-    attributes: { name: string, type: string }[],
+    attributes: { name: string, type: string | Output<string> }[],
     globalSecondaryIndexes?: {
         name: string,
         hashKey: string,
