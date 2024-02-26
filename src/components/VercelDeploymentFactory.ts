@@ -34,7 +34,7 @@ export const VercelDeploymentFactory = (
             repo: githubRepo,
             type: "github"
         }
-    });
+    }, { provider });
     // Create Environment Variables
     ([
         ...environmentVariables??[],
@@ -46,19 +46,19 @@ export const VercelDeploymentFactory = (
             key: variable.key,
             value: variable.value,
             targets: [pulumi.getStack() === "prod" ? "production" : "preview"]
-        })
+        }, { provider })
     })
     // Launch Deployment
     const deployment = new vercel.Deployment(`${nameTag}_deployment`, {
         projectId: project.id,
         production: pulumi.getStack() === "prod" ? true : false,
         ref: pulumi.getStack()
-    })
+    }, { provider })
     // Create domain
     new vercel.ProjectDomain(`${nameTag}_domain`, {
         domain: `${pulumi.getStack()}.dev.${new pulumi.Config().require("rootDomain")}`,
         projectId: project.id
-    })
+    }, { provider })
     // Create AWS Route 53 record
     const zone = pulumi.output(aws.route53.getZone({name: new pulumi.Config().require("rootDomain")}))
     new aws.route53.Record(`${nameTag}_ARecord`, {
