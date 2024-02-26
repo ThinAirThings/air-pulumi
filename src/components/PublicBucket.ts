@@ -6,17 +6,18 @@ import * as path from "path";
 import * as fs from "fs";
 import { createNameTag } from "../utils/createNameTag";
 
-export const PublicBucket= ({
+export const PublicBucket = () => ({
     tag,
     version,
-    resourceDirectoryPath
+    resourceDirectoryPath,
+    // domainPrefix
 }: {
-    tag: string,
+    tag: Lowercase<string>,
     version: number,
     resourceDirectoryPath?: string
 }) => {
     // Create nametag
-    const nameTag = createNameTag(tag, version)
+    const nameTag = createNameTag(tag, version).replaceAll("_", "-")
     // Create a logo bucket
     const bucket = new aws.s3.BucketV2(nameTag)
     new aws.s3.BucketPublicAccessBlock(`${nameTag}_publicAccessBlock`, {
