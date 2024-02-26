@@ -22,7 +22,7 @@ export const DynamoTableFactory = (applicationIamUser: aws.iam.User) =>({
     }[]
 }) => {
     const nameTag = createNameTag(tag, version)
-    const table = new aws.dynamodb.Table(nameTag, {
+    const table = new aws.dynamodb.Table(`${nameTag}_table`, {
         hashKey,
         rangeKey,
         attributes: [{
