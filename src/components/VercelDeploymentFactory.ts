@@ -28,7 +28,7 @@ export const VercelDeploymentFactory = (
     });
     // Project Setup
     const project = new vercel.Project(`${nameTag}_project`, {
-        name: nameTag,
+        name: tag,
         framework: "nextjs",
         gitRepository: {
             repo: githubRepo,
