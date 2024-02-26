@@ -49,14 +49,14 @@ export const VercelDeploymentFactory = (
     })
     // Create domain
     new vercel.ProjectDomain(`${nameTag}_domain`, {
-        domain: `${pulumi.getStack()}.${new pulumi.Config().require("rootDomain")}`,
+        domain: `${pulumi.getStack()}.dev.${new pulumi.Config().require("rootDomain")}`,
         projectId: project.id
     })
     // Create AWS Route 53 record
     const zone = pulumi.output(aws.route53.getZone({name: new pulumi.Config().require("rootDomain")}))
     new aws.route53.Record(`${nameTag}_ARecord`, {
         zoneId: zone.zoneId,
-        name: `${pulumi.getStack()}.${new pulumi.Config().require("rootDomain")}`,
+        name: `${pulumi.getStack()}.dev.${new pulumi.Config().require("rootDomain")}`,
         type: "A",
         ttl: 300,
         records: ["76.76.21.21"], // This works for all vercel deployments
