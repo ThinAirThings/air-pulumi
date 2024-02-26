@@ -16,7 +16,7 @@ export const VercelDeploymentFactory = (
     apiToken: pulumi.Output<string>,
     environmentVariables?: {
         key: string
-        value: string
+        value: string | pulumi.Output<string>
     }[]
 }) => {
     // Create nametag
