@@ -46,7 +46,13 @@ export const VercelDeploymentFactory = (
             projectId: project.id,
             key: variable.key,
             value: variable.value,
-            targets: [pulumi.getStack() === "prod" ? "production" : "preview"]
+            targets: [pulumi.getStack() === "prod" 
+                ? "production" 
+                : pulumi.getStack() === "dev" 
+                    ? "development"
+                    : "preview"
+            ],
+            gitBranch: pulumi.getStack() === "prod" ? "main" : pulumi.getStack()
         }, { provider })
     })
     // Launch Deployment

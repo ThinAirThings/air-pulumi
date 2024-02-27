@@ -20,7 +20,7 @@ export const PublicBucket = ({
     const nameTag = createNameTag(tag, version).replaceAll("_", "-")
     // Create a logo bucket
     const bucket = new aws.s3.BucketV2(nameTag)
-    new aws.s3.BucketPublicAccessBlock(`${nameTag}_publicAccessBlock`, {
+    const publicAccessBlock = new aws.s3.BucketPublicAccessBlock(`${nameTag}_publicAccessBlock`, {
         bucket: bucket.id,
         blockPublicAcls: false,
         blockPublicPolicy: false,
@@ -39,7 +39,7 @@ export const PublicBucket = ({
                 Principal: "*",
             }],
         }),
-    })
+    }, {dependsOn: [publicAccessBlock]})
     // Add resources to expose
     if (resourceDirectoryPath) {
         fs.readdirSync(resourceDirectoryPath).forEach(file => {
