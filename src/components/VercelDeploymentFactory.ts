@@ -55,20 +55,39 @@ export const VercelDeploymentFactory = (
         production: pulumi.getStack() === "prod" ? true : false,
         ref: pulumi.getStack()
     }, { provider })
-    // Create domain
-    new vercel.ProjectDomain(`${nameTag}_domain`, {
-        domain: `${pulumi.getStack()}.dev.${new pulumi.Config().require("rootDomain")}`,
-        projectId: project.id
-    }, { provider })
+
     // Create AWS Route 53 record
     const zone = pulumi.output(aws.route53.getZone({name: new pulumi.Config().require("rootDomain")}))
-    new aws.route53.Record(`${nameTag}_ARecord`, {
-        zoneId: zone.zoneId,
-        name: `${pulumi.getStack()}.dev.${new pulumi.Config().require("rootDomain")}`,
-        type: "A",
-        ttl: 300,
-        records: ["76.76.21.21"], // This works for all vercel deployments
-    });
+    // Create domain records
+    if (pulumi.getStack() === 'prod') {
+        // Create Apex-domain
+        const domainName = new pulumi.Config().require("rootDomain")
+        new vercel.ProjectDomain(`${nameTag}_domain`, {
+            domain: domainName,
+            projectId: project.id
+        }, { provider })
+        new aws.route53.Record(`${nameTag}_ARecord`, {
+            zoneId: zone.zoneId,
+            name: domainName,
+            type: "A",
+            ttl: 300,
+            records: ["76.76.21.21"], // This works for all vercel deployments
+        })
+    } else {
+        // Create Sub-domain
+        const domainName = `${pulumi.getStack()}.dev.${new pulumi.Config().require("rootDomain")}`
+        new vercel.ProjectDomain(`${nameTag}_domain`, {
+            domain: domainName,
+            projectId: project.id
+        }, { provider })
+        new aws.route53.Record(`${nameTag}_CNAMERecord`, {
+            zoneId: zone.zoneId,
+            name: domainName,
+            type: "CNAME",
+            ttl: 300,
+            records: ['cname.vercel-dns.com']
+        })
+    }
     return {
         deployment
     }
