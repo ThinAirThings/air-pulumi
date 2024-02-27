@@ -38,6 +38,7 @@ export const VercelDeploymentFactory = (
     // Create Environment Variables
     ([
         ...environmentVariables??[],
+        { key: "BUILD_ENVIRONMENT", value: pulumi.getStack()},
         { key: "AWS_ACCESS_KEY_ID", value: applicationIamAccessKey.id },
         { key: "AWS_SECRET_ACCESS_KEY", value: applicationIamAccessKey.secret }
     ]).forEach(variable => {
