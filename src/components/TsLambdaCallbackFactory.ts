@@ -14,7 +14,7 @@ export const TsLambdaCallbackFactory =
         environmentVariables,
     }: {
         tag: string;
-        payloadType: T;
+        payloadType: () => T;
         callback: (payload: InferType<T>) => Promise<any>;
         environmentVariables?: Input<Record<string, Input<string>>>;
     }) => {
@@ -31,7 +31,7 @@ export const TsLambdaCallbackFactory =
                 },
             },
             callback: async (event: APIGatewayProxyEvent) =>
-                validatedCallback(event, payloadType, callback),
+                validatedCallback(event, payloadType(), callback),
         });
         // Set Permissions
         new aws.iam.UserPolicyAttachment(`${nameTag}_policy_attachment`, {
