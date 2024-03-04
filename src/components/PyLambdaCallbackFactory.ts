@@ -52,6 +52,7 @@ export const PyLambdaCallbackFactory =
             code: new pulumi.asset.AssetArchive({
                 ".": new pulumi.asset.FileArchive(codePath),
             }),
+            handler: "index.handler"
         });
         // Set Permissions
         new aws.iam.UserPolicyAttachment(`${nameTag}_policy_attachment`, {
