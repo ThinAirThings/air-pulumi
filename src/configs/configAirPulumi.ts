@@ -4,6 +4,7 @@ import * as pulumi from "@pulumi/pulumi";
 import { DynamoTableFactory } from "../components/DynamoTableFactory";
 import { VercelDeploymentFactory } from "../components/VercelDeploymentFactory";
 import { TsLambdaCallbackFactory } from "../components/TsLambdaCallbackFactory";
+import { PyLambdaCallbackFactory } from "../components/PyLambdaCallbackFactory";
 
 export const configAirPulumi = () => {
     // Create IAM User
@@ -19,6 +20,7 @@ export const configAirPulumi = () => {
         accessKey,
         DynamoTable: DynamoTableFactory(iamUser),
         VercelDeployment: VercelDeploymentFactory(accessKey),
-        TsLambdaCallback: TsLambdaCallbackFactory(iamUser)
+        TsLambdaCallback: TsLambdaCallbackFactory(iamUser),
+        PyLambdaCallback: PyLambdaCallbackFactory(iamUser),
     };
 };
