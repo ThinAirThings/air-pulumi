@@ -35,7 +35,7 @@ export const PyLambdaCallbackFactory =
         // Create Lambda Policy
         new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_policy_attachment`, {
             role: lambdaRole,
-            policyArn: aws.iam.ManagedPolicy.LambdaFullAccess,
+            policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
         })
         // Create Lambda
 
