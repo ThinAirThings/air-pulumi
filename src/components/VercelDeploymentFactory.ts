@@ -10,10 +10,12 @@ export const VercelDeploymentFactory = (
     githubRepo,
     apiToken,
     environmentVariables,
+    projectId
 }: {
     tag: string,
     githubRepo: string,
     apiToken: pulumi.Output<string>,
+    projectId?: string,
     environmentVariables?: {
         key: string
         value: string | pulumi.Output<string>
@@ -27,14 +29,16 @@ export const VercelDeploymentFactory = (
         team: new pulumi.Config('vercel').require("team")
     });
     // Project Setup
-    const project = new vercel.Project(`${nameTag}_project`, {
-        name: tag,
-        framework: "nextjs",
-        gitRepository: {
-            repo: githubRepo,
-            type: "github"
-        }
-    }, { provider });
+    const project = !(projectId) 
+        ? new vercel.Project(`${nameTag}_project`, {
+            name: tag,
+            framework: "nextjs",
+            gitRepository: {
+                repo: githubRepo,
+                type: "github"
+            }
+        }, { provider }) 
+        : null;
     // Create Environment Variables
     ([
         ...environmentVariables??[],
@@ -43,7 +47,7 @@ export const VercelDeploymentFactory = (
         { key: "AWS_SECRET_ACCESS_KEY", value: applicationIamAccessKey.secret }
     ]).forEach(variable => {
         new vercel.ProjectEnvironmentVariable(`${nameTag}_environmentVar_${variable.key}`, {
-            projectId: project.id,
+            projectId: project?.id??projectId!,
             key: variable.key,
             value: variable.value,
             targets: [pulumi.getStack() === "prod" 
@@ -57,7 +61,7 @@ export const VercelDeploymentFactory = (
     })
     // Launch Deployment
     const deployment = new vercel.Deployment(`${nameTag}_deployment`, {
-        projectId: project.id,
+        projectId: project?.id??projectId!,
         production: pulumi.getStack() === "prod" ? true : false,
         ref: pulumi.getStack()
     }, { provider })
@@ -70,7 +74,7 @@ export const VercelDeploymentFactory = (
         const domainName = new pulumi.Config().require("rootDomain")
         new vercel.ProjectDomain(`${nameTag}_domain`, {
             domain: domainName,
-            projectId: project.id
+            projectId: project?.id??projectId!
         }, { provider })
         new aws.route53.Record(`${nameTag}_ARecord`, {
             zoneId: zone.zoneId,
@@ -84,7 +88,7 @@ export const VercelDeploymentFactory = (
         const domainName = `${pulumi.getStack()}.dev.${new pulumi.Config().require("rootDomain")}`
         new vercel.ProjectDomain(`${nameTag}_domain`, {
             domain: domainName,
-            projectId: project.id
+            projectId: project?.id??projectId!
         }, { provider })
         new aws.route53.Record(`${nameTag}_CNAMERecord`, {
             zoneId: zone.zoneId,
