@@ -71,7 +71,7 @@ export const PyLambdaCallbackFactory =
             lambdaLayer = new aws.lambda.LayerVersion(`${nameTag}-lambda-layer`, {
                 compatibleRuntimes: [aws.lambda.Runtime.Python3d11],
                 code: new pulumi.asset.AssetArchive({
-                    "python": new pulumi.asset.FileArchive(layerTargetPath),
+                    "pickles": new pulumi.asset.FileArchive(layerTargetPath),
                 }),
                 layerName: `${nameTag}-lambda-layer`,
                 description: `${nameTag} dependencies`,
