@@ -5,6 +5,8 @@ import { Input } from "@pulumi/pulumi";
 import * as pulumi from "@pulumi/pulumi";
 import path = require("path");
 import fs = require("fs");
+import os = require("os");
+import { LayerVersion } from "@pulumi/aws/lambda";
 export const PyLambdaCallbackFactory =
     (applicationIamUser: aws.iam.User) =>
     ({
@@ -39,18 +41,41 @@ export const PyLambdaCallbackFactory =
             policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
         })
         // Check if the 'venv' directory exists within the 'codePath'
-        const venvPath = path.join(codePath, 'venv', 'lib', 'python3.11', 'site-packages');
-        const hasVenv = fs.existsSync(venvPath);
+        const dependencyPath = path.join(codePath, 'venv', 'lib', 'python3.11', 'site-packages');
+        const hasDependencies = fs.existsSync(dependencyPath);
+        let lambdaLayer: LayerVersion | undefined;
+        if (hasDependencies) {
+            // Define the target path as 'python' to match the Lambda Layer structure
+            const layerTargetPath = path.join(os.tmpdir(), 'python');
 
-        // Create Lambda Layer if necessary
-        const lambdaLayer = hasVenv
-            ? new aws.lambda.LayerVersion(`${nameTag}-lambda-layer`, {
+            // Ensure the target directory exists
+            if (!fs.existsSync(layerTargetPath)) {
+                fs.mkdirSync(layerTargetPath, { recursive: true });
+            }
+
+            // Copy dependencies from the source path to the target path
+            fs.readdirSync(dependencyPath).forEach((file) => {
+                const srcPath = path.join(dependencyPath, file);
+                const destPath = path.join(layerTargetPath, file);
+                
+                // Copy file or directory
+                const stat = fs.statSync(srcPath);
+                if (stat.isDirectory()) {
+                    fs.cpSync(srcPath, destPath, { recursive: true });
+                } else {
+                    fs.copyFileSync(srcPath, destPath);
+                }
+            });
+            // Create Lambda Layer if necessary
+            lambdaLayer = new aws.lambda.LayerVersion(`${nameTag}-lambda-layer`, {
                 compatibleRuntimes: [aws.lambda.Runtime.Python3d11],
-                code: new pulumi.asset.FileArchive(venvPath),
+                code: new pulumi.asset.FileArchive(dependencyPath),
                 layerName: `${nameTag}-lambda-layer`,
                 description: `${nameTag} dependencies`,
             })
-            : undefined;
+        }
+
+
         // Create Lambda
         const lambda = new aws.lambda.Function(`${nameTag}-lambda`, {
             role: lambdaRole.arn,
