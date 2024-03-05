@@ -75,7 +75,6 @@ export const PyLambdaCallbackFactory =
             })
         }
 
-
         // Create Lambda
         const lambda = new aws.lambda.Function(`${nameTag}-lambda`, {
             role: lambdaRole.arn,
