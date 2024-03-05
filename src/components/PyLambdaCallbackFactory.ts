@@ -4,7 +4,7 @@ import { ZodType, z, infer as InferType } from "zod";
 import { Input } from "@pulumi/pulumi";
 import * as pulumi from "@pulumi/pulumi";
 import path = require("path");
-
+import fs = require("fs");
 export const PyLambdaCallbackFactory =
     (applicationIamUser: aws.iam.User) =>
     ({
@@ -14,7 +14,7 @@ export const PyLambdaCallbackFactory =
     }: {
         tag: string;
         codePath: string;
-        environmentVariables?: Input<Record<string, Input<string>>>;
+        environmentVariables?: Input<Record<string, Input<string>>>
     }) => {
         // Create nametag
         const nameTag = createNameTag(tag).replaceAll("_", "-");
@@ -38,6 +38,19 @@ export const PyLambdaCallbackFactory =
             role: lambdaRole,
             policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
         })
+        // Check if the 'venv' directory exists within the 'codePath'
+        const venvPath = path.join(codePath, 'venv', 'lib', 'python3.11', 'site-packages');
+        const hasVenv = fs.existsSync(venvPath);
+
+        // Create Lambda Layer if necessary
+        const lambdaLayer = hasVenv
+            ? new aws.lambda.LayerVersion(`${nameTag}-lambda-layer`, {
+                compatibleRuntimes: [aws.lambda.Runtime.Python3d11],
+                code: new pulumi.asset.FileArchive(venvPath),
+                layerName: `${nameTag}-lambda-layer`,
+                description: `${nameTag} dependencies`,
+            })
+            : undefined;
         // Create Lambda
         const lambda = new aws.lambda.Function(`${nameTag}-lambda`, {
             role: lambdaRole.arn,
@@ -50,10 +63,10 @@ export const PyLambdaCallbackFactory =
                 },
             },
             code: new pulumi.asset.AssetArchive({
-                ".": new pulumi.asset.FileArchive(codePath),
-                "deps": new pulumi.asset.FileArchive(path.join(codePath, "venv", "lib", "python3.10", "site-packages")),
+                ".": new pulumi.asset.FileArchive(path.join(codePath, "src"))
             }),
-            handler: "index.handler"
+            handler: "index.handler",
+            layers: lambdaLayer ? [lambdaLayer.arn] : undefined,
         });
         // Set Permissions
         new aws.iam.UserPolicyAttachment(`${nameTag}_policy_attachment`, {
