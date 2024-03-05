@@ -3,6 +3,7 @@ import { createNameTag } from "../utils/createNameTag";
 import { ZodType, z, infer as InferType } from "zod";
 import { Input } from "@pulumi/pulumi";
 import * as pulumi from "@pulumi/pulumi";
+import path = require("path");
 
 export const PyLambdaCallbackFactory =
     (applicationIamUser: aws.iam.User) =>
@@ -38,7 +39,6 @@ export const PyLambdaCallbackFactory =
             policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
         })
         // Create Lambda
-
         const lambda = new aws.lambda.Function(`${nameTag}-lambda`, {
             role: lambdaRole.arn,
             runtime: aws.lambda.Runtime.Python3d11,
@@ -51,6 +51,7 @@ export const PyLambdaCallbackFactory =
             },
             code: new pulumi.asset.AssetArchive({
                 ".": new pulumi.asset.FileArchive(codePath),
+                "deps": new pulumi.asset.FileArchive(path.join(codePath, "venv", "lib", "python3.10", "site-packages")),
             }),
             handler: "index.handler"
         });
