@@ -8,12 +8,13 @@
         "npmpub": "npm run build && git add . && git commit -m \"mod\" && git push && npm version patch && npm publish --access public",
         "format": "npx prettier --write ."
     },
+
     "files": [
         "dist"
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ThinAirThings/air-pulumi.git"
+        "url": "git+https://github.com/GrantGraph/types.git"
     },
     "devDependencies": {
         "@types/aws-lambda": "^8.10.134",

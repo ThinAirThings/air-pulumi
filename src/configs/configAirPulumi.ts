@@ -16,10 +16,33 @@ export const configAirPulumi = () => {
     const accessKey = new aws.iam.AccessKey(createNameTag("accessKey"), {
         user: iamUser.name,
     });
+    const DynamoTable = DynamoTableFactory(iamUser);
     return {
         iamUser,
         accessKey,
-        DynamoTable: DynamoTableFactory(iamUser),
+        DynamoTable,
+        NodeTable: (nodeType: string, version?: number) => DynamoTable({
+            tag: nodeType,
+            version: version || 1,
+            hashKey: "nodeId",
+            attributes: [{
+                name: "nodeId",
+                type: "S"
+            }]
+        }),
+        EdgeTable: (edgeType: string, version?: number) => DynamoTable({
+            tag: edgeType,
+            version: version || 1,
+            hashKey: "toNodeId",
+            rangeKey: "fromNodeId",
+            attributes: [{
+                name: "toNodeId",
+                type: "S"
+            }, {
+                name: "fromNodeId",
+                type: "S"
+            }]
+        }),
         getDynamoTable: getDynamoTableFactory(iamUser),
         VercelDeployment: VercelDeploymentFactory(accessKey),
         TsLambdaCallback: TsLambdaCallbackFactory(iamUser),
