@@ -21,7 +21,13 @@ export const configAirPulumi = () => {
         iamUser,
         accessKey,
         DynamoTable,
-        NodeTable: (nodeType: string, version?: number) => DynamoTable({
+        NodeTable: ({
+            nodeType,
+            version
+        }:{
+            nodeType: string, 
+            version?: number
+        }) => DynamoTable({
             tag: nodeType,
             version: version || 1,
             hashKey: "nodeId",
@@ -30,7 +36,13 @@ export const configAirPulumi = () => {
                 type: "S"
             }]
         }),
-        EdgeTable: (edgeType: string, version?: number) => DynamoTable({
+        EdgeTable: ({
+            edgeType,
+            version
+        }:{
+            edgeType: string, 
+            version?: number
+        }) => DynamoTable({
             tag: edgeType,
             version: version || 1,
             hashKey: "toNodeId",
