@@ -1,6 +1,6 @@
 {
     "name": "@thinairthings/air-pulumi",
-    "version": "0.1.49",
+    "version": "0.1.50",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
@@ -8,7 +8,6 @@
         "npmpub": "npm run build && git add . && git commit -m \"mod\" && git push && npm version patch && npm publish --access public",
         "format": "npx prettier --write ."
     },
-
     "files": [
         "dist"
     ],
