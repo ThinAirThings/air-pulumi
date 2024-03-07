@@ -36,6 +36,7 @@ export const configAirPulumi = () => {
                 type: "S"
             }]
         }),
+
         EdgeTable: ({
             edgeType,
             version
