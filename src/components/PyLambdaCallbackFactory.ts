@@ -7,6 +7,7 @@ import path = require("path");
 import fs = require("fs");
 import os = require("os");
 import { LayerVersion } from "@pulumi/aws/lambda";
+
 export const PyLambdaCallbackFactory =
     (applicationIamUser: aws.iam.User) =>
     ({
@@ -66,12 +67,22 @@ export const PyLambdaCallbackFactory =
                     fs.copyFileSync(srcPath, destPath);
                 }
             });
+            // Upload the dependencies to S3
+            const bucket = new aws.s3.Bucket(`${nameTag}-lambda-layer-bucket`);
+            const object = new aws.s3.BucketObject(`${nameTag}-lambda-layer-object`, {
+                bucket: bucket,
+                source: new pulumi.asset.AssetArchive({
+                    "python": new pulumi.asset.FileArchive(layerTargetPath),
+                }),
+            });
             // Create Lambda Layer if necessary
             lambdaLayer = new aws.lambda.LayerVersion(`${nameTag}-lambda-layer`, {
                 compatibleRuntimes: [aws.lambda.Runtime.Python3d11],
-                code: new pulumi.asset.AssetArchive({
-                    "python": new pulumi.asset.FileArchive(layerTargetPath),
-                }),
+                // code: new pulumi.asset.AssetArchive({
+                //     "python": new pulumi.asset.FileArchive(layerTargetPath),
+                // }),
+                s3Bucket: bucket.bucket,
+                s3Key: object.key,
                 layerName: `${nameTag}-lambda-layer`,
                 description: `${nameTag} dependencies`,
             })
