@@ -40,7 +40,7 @@ export const PyLambdaImageFactory =
         })
         // Create ECR Repo
         const ecrRepository = new aws.ecr.Repository(`${nameTag}_ecr_repository`);
-        const ecrAuthToken = aws.ecr.getAuthorizationTokenOutput({
+        const authToken = aws.ecr.getAuthorizationTokenOutput({
             registryId: ecrRepository.registryId,
         });
         // Create Docker Image
@@ -51,10 +51,9 @@ export const PyLambdaImageFactory =
             },
             imageName: pulumi.interpolate`${ecrRepository.repositoryUrl}:latest`,
             registry: {
+                password: pulumi.secret(authToken.apply(authToken => authToken.password)),
                 server: ecrRepository.repositoryUrl,
-                username: aws.config.accessKey,
-                password: aws.config.secretKey,
-            }
+            },
 
         })
         // Create Lambda
