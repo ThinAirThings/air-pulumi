@@ -24,10 +24,14 @@ export const configAirPulumi = () => {
         DynamoTable,
         NodeTable: ({
             nodeType,
-            version
+            version,
+            streamEnabled,
+            streamViewType
         }:{
             nodeType: string, 
             version?: number
+            streamEnabled?: boolean
+            streamViewType?: "NEW_IMAGE" | "OLD_IMAGE" | "NEW_AND_OLD_IMAGES" | "KEYS_ONLY"
         }) => DynamoTable({
             tag: `${nodeType}_node`,
             version: version || 1,
@@ -39,7 +43,9 @@ export const configAirPulumi = () => {
             },{
                 name: "nodeId",
                 type: "S"
-            }]
+            }],
+            streamEnabled,
+            streamViewType
         }),
         getDynamoTable: getDynamoTableFactory(iamUser),
         VercelDeployment: VercelDeploymentFactory(accessKey),

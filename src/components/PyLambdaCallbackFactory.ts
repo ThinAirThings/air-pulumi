@@ -39,8 +39,9 @@ export const PyLambdaCallbackFactory =
         // Create Lambda Policy
         new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_policy_attachment`, {
             role: lambdaRole,
-            policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
+            policyArn: aws.iam.ManagedPolicy.LambdaFullAccess,
         })
+
         // Check if the 'venv' directory exists within the 'codePath'
         const dependencyPath = path.join(codePath, 'venv', 'lib', 'python3.11', 'site-packages');
         const hasDependencies = fs.existsSync(dependencyPath);
