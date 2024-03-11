@@ -44,7 +44,6 @@ export const VercelDeploymentFactory =
               )
             : null;
         // Create Environment Variables
-
         [
             ...(environmentVariables ?? []),
             { key: "BUILD_ENVIRONMENT", value: pulumi.getStack() },

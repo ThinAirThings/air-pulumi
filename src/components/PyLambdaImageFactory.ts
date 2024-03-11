@@ -1,6 +1,8 @@
 import * as aws from "@pulumi/aws";
 import { createNameTag } from "../utils/createNameTag";
 import * as docker from "@pulumi/docker";
+import * as pulumi from "@pulumi/pulumi";
+
 
 export const PyLambdaImageFactory = 
     (applicationIamUser: aws.iam.User) =>
@@ -35,13 +37,49 @@ export const PyLambdaImageFactory =
             role: lambdaRole,
             policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
         })
+        // Create ECR Repo
+        const ecrRepository = new aws.ecr.Repository(`${nameTag}_ecr_repository`);
+        const ecrAuthToken = aws.ecr.getAuthorizationTokenOutput({
+            registryId: ecrRepository.registryId,
+        });
+
+        // Create Docker Image
+        const image = new docker.Image(`${nameTag}_docker_image`, {
+            imageName: tag,
+            build: {
+                context: dockerProjectPath,
+                dockerfile: 'Dockerfile'
+            },
+            registry: {
+                server: ecrRepository.repositoryUrl,
+                password: pulumi.secret(ecrAuthToken.apply(authToken => authToken.password)),
+            }
+        })
         // Create Lambda
         const lambda = new aws.lambda.Function(`${nameTag}_lambda`, {
             role: lambdaRole.arn,
-            imageUri,
+            imageUri: image.urn,
             environment: {
                 variables: environmentVariables,
             },
+        });
+        // Set Permissions
+        new aws.iam.UserPolicyAttachment(`${nameTag}_policy_attachment`, {
+            user: applicationIamUser.name,
+            policyArn: new aws.iam.Policy(`${nameTag}_policy`, {
+                policy: lambda.arn.apply((arn) =>
+                    JSON.stringify({
+                        Version: "2012-10-17",
+                        Statement: [
+                            {
+                                Effect: "Allow",
+                                Action: ["lambda:InvokeFunction"],
+                                Resource: arn,
+                            },
+                        ],
+                    }),
+                ),
+            }).arn,
         });
         return lambda;
     }

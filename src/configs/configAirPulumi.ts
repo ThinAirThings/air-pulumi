@@ -6,6 +6,7 @@ import { VercelDeploymentFactory } from "../components/VercelDeploymentFactory";
 import { TsLambdaCallbackFactory } from "../components/TsLambdaCallbackFactory";
 import { PyLambdaCallbackFactory } from "../components/PyLambdaCallbackFactory";
 import { getDynamoTableFactory } from "../getters/getDynamoTableFactory";
+import { PyLambdaImageFactory } from "../components/PyLambdaImageFactory";
 
 export const configAirPulumi = () => {
     // Create IAM User
@@ -44,5 +45,6 @@ export const configAirPulumi = () => {
         VercelDeployment: VercelDeploymentFactory(accessKey),
         TsLambdaCallback: TsLambdaCallbackFactory(iamUser),
         PyLambdaCallback: PyLambdaCallbackFactory(iamUser),
+        PyLambdaImage: PyLambdaImageFactory(iamUser)
     };
 };
