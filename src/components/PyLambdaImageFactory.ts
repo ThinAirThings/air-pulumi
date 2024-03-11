@@ -45,6 +45,7 @@ export const PyLambdaImageFactory =
         });
 
         // Create Docker Image
+        const imageTag = `latest-${Math.floor(new Date().getTime() / 1000)}`
         const image = new docker.Image(`${nameTag}_docker_image`, { 
             build: {
                 // args: {
@@ -57,13 +58,12 @@ export const PyLambdaImageFactory =
                 context: `${dockerProjectPath}/`,
                 dockerfile: `${dockerProjectPath}/Dockerfile`
             },
-            imageName: pulumi.interpolate`${ecrRepository.repositoryUrl}:latest`,
+            imageName: pulumi.interpolate`${ecrRepository.repositoryUrl}:${imageTag}`,
             registry: {
                 username: "AWS",
                 password: pulumi.secret(authToken.apply(authToken => authToken.password)),
                 server: ecrRepository.repositoryUrl,
-            },
-
+            }
         })
         // Create Lambda
         const lambda = new aws.lambda.Function(`${nameTag}_lambda`, {
