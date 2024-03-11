@@ -6,6 +6,7 @@ export const validatedCallback = async <T extends ZodType>(
     schema: T,
     callback: (payload: InferType<T>) => Promise<any>,
 ) => {
+    console.log(event)
     const result = schema.safeParse({
         ...event.pathParameters,
         ...event.queryStringParameters,
