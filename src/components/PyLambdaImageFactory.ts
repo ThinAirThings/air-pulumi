@@ -45,7 +45,7 @@ export const PyLambdaImageFactory =
 
         // Create Docker Image
         const image = new docker.Image(`${nameTag}_docker_image`, {
-            imageName: tag,
+            imageName: `${nameTag}`,
             build: {
                 context: dockerProjectPath,
                 dockerfile: 'Dockerfile'
@@ -57,8 +57,9 @@ export const PyLambdaImageFactory =
         })
         // Create Lambda
         const lambda = new aws.lambda.Function(`${nameTag}_lambda`, {
+            packageType: "Image",
             role: lambdaRole.arn,
-            imageUri: image.urn,
+            imageUri: image.imageName,
             environment: {
                 variables: environmentVariables,
             },
