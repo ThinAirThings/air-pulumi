@@ -29,6 +29,7 @@
     "keywords": [],
     "author": "Dan Lannan",
     "dependencies": {
+        "@aws-sdk/util-dynamodb": "^3.529.1",
         "@pulumi/aws-apigateway": "^2.4.0",
         "@pulumi/docker": "^4.5.1",
         "zod": "^3.22.4"
