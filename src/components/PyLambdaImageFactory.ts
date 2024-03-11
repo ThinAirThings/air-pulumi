@@ -13,7 +13,7 @@ export const PyLambdaImageFactory =
     }: {
         tag: string;
         dockerProjectPath: string;
-        environmentVariables?: Record<string, string>
+        environmentVariables?: Record<string, pulumi.Input<string>>
     }) => {
         // Create nametag
         const nameTag = createNameTag(tag).replaceAll("_", "-");
