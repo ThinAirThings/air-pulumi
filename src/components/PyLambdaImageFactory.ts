@@ -49,7 +49,7 @@ export const PyLambdaImageFactory =
             imageName: `${nameTag}`,
             build: {
                 context: `${dockerProjectPath}/`,
-                dockerfile: 'Dockerfile'
+                dockerfile: `${dockerProjectPath}/Dockerfile`
             },
             registry: {
                 server: ecrRepository.repositoryUrl,
