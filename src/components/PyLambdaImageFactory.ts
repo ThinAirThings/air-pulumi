@@ -47,6 +47,12 @@ export const PyLambdaImageFactory =
         // Create Docker Image
         const image = new docker.Image(`${nameTag}_docker_image`, {
             build: {
+                args: {
+                    BUILDKIT_INLINE_CACHE: "1",
+                },
+                cacheFrom: {
+                    images: [pulumi.interpolate`${ecrRepository.repositoryUrl}:latest`],
+                },
                 context: `${dockerProjectPath}/`,
                 dockerfile: `${dockerProjectPath}/Dockerfile`
             },
