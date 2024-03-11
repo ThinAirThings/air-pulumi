@@ -51,6 +51,7 @@ export const PyLambdaImageFactory =
             },
             imageName: pulumi.interpolate`${ecrRepository.repositoryUrl}:latest`,
             registry: {
+                username: "AWS",
                 password: pulumi.secret(authToken.apply(authToken => authToken.password)),
                 server: ecrRepository.repositoryUrl,
             },
