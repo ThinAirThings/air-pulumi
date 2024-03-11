@@ -11,6 +11,8 @@ export const DynamoTableFactory =
         rangeKey,
         attributes,
         globalSecondaryIndexes,
+        streamEnabled,
+        streamViewType,
     }: {
         tag: string;
         version: number;
@@ -23,6 +25,8 @@ export const DynamoTableFactory =
             rangeKey?: string;
             projectionType: string;
         }[];
+        streamEnabled?: boolean;
+        streamViewType?: "NEW_IMAGE" | "OLD_IMAGE" | "NEW_AND_OLD_IMAGES" | "KEYS_ONLY";
     }) => {
         const nameTag = createNameTag(tag, version);
         const table = new aws.dynamodb.Table(
@@ -45,6 +49,8 @@ export const DynamoTableFactory =
                     }),
                 ),
                 billingMode: "PAY_PER_REQUEST",
+                streamEnabled,
+                streamViewType
             },
             { dependsOn: [applicationIamUser] },
         );

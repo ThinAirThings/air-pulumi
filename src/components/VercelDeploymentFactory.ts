@@ -9,13 +9,13 @@ export const VercelDeploymentFactory =
         tag,
         githubRepo,
         apiToken,
-        environmentVariables,
         projectId,
+        environmentVariables,
     }: {
         tag: string;
         githubRepo: string;
+        projectId?: pulumi.Output<string>;
         apiToken: pulumi.Output<string>;
-        projectId?: string;
         environmentVariables?: {
             key: string;
             value: string | pulumi.Output<string>;
