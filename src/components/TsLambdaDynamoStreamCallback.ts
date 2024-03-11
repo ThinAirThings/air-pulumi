@@ -6,13 +6,13 @@ import { dynamodb } from "@thinairthings/air-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 
 
-export const TsLambdaDynamoStreamCallback = ({
+export const TsLambdaDynamoStreamCallback = <T extends Record<string, any>>({
     tag,
     callback,
     environmentVariables,
 }: {
     tag: string;
-    callback: <T extends Record<string, any>>(payload: T) => Promise<any>;
+    callback: (payload: T) => Promise<any>;
     environmentVariables?: Input<Record<string, Input<string>>>;
 }) => {
     // Create nametag
@@ -32,7 +32,7 @@ export const TsLambdaDynamoStreamCallback = ({
                 return;
             }
             const payload = unmarshall(event.Records[0].dynamodb.NewImage as any);
-            return await callback(payload);
+            return await callback(payload as any);
         }
     });
     return lambda;
