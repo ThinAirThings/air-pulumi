@@ -39,7 +39,9 @@ export const PyLambdaImageFactory =
             policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
         })
         // Create ECR Repo
-        const ecrRepository = new aws.ecr.Repository(`${nameTag}_ecr_repository`);
+        const ecrRepository = new aws.ecr.Repository(`${nameTag}_ecr_repository`, {
+            forceDelete: true,
+        });
         const authToken = aws.ecr.getAuthorizationTokenOutput({
             registryId: ecrRepository.registryId,
         });
