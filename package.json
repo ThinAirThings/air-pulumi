@@ -30,6 +30,7 @@
     "author": "Dan Lannan",
     "dependencies": {
         "@pulumi/aws-apigateway": "^2.4.0",
+        "@pulumi/docker": "^4.5.1",
         "zod": "^3.22.4"
     }
 }
