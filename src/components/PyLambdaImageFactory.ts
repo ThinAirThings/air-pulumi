@@ -46,14 +46,15 @@ export const PyLambdaImageFactory =
 
         // Create Docker Image
         const image = new docker.Image(`${nameTag}_docker_image`, {
-            imageName: pulumi.interpolate`${ecrRepository.repositoryUrl}:latest`,
             build: {
                 context: `${dockerProjectPath}/`,
                 dockerfile: `${dockerProjectPath}/Dockerfile`
             },
+            imageName: pulumi.interpolate`${ecrRepository.repositoryUrl}:latest`,
             registry: {
                 server: ecrRepository.repositoryUrl,
-                password: pulumi.secret(ecrAuthToken.apply(authToken => authToken.password)),
+                username: aws.config.accessKey,
+                password: ecrRepository.registryId.apply(registryId => aws.ecr.getCredentials({registryId}).then(credentials => credentials.authorizationToken)),
             }
 
         })
