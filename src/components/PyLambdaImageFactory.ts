@@ -48,7 +48,7 @@ export const PyLambdaImageFactory =
         const image = new docker.Image(`${nameTag}_docker_image`, {
             imageName: `${nameTag}`,
             build: {
-                context: dockerProjectPath,
+                context: `${dockerProjectPath}/`,
                 dockerfile: 'Dockerfile'
             },
             registry: {
