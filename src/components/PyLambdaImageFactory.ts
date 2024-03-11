@@ -54,6 +54,7 @@ export const PyLambdaImageFactory =
                 cacheFrom: {
                     images: [pulumi.interpolate`${ecrRepository.repositoryUrl}:latest`],
                 },
+                platform: "linux/amd64",
                 context: `${dockerProjectPath}/`,
                 dockerfile: `${dockerProjectPath}/Dockerfile`
             },
