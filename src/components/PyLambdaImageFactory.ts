@@ -15,6 +15,7 @@ export const PyLambdaImageFactory =
         dockerProjectPath: string;
         environmentVariables?: Record<string, pulumi.Input<string>>
     }) => {
+
         // Create nametag
         const nameTag = createNameTag(tag).replaceAll("_", "-");
         // Create Lambda Permissions
