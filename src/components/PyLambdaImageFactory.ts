@@ -43,6 +43,7 @@ export const PyLambdaImageFactory =
         const authToken = aws.ecr.getAuthorizationTokenOutput({
             registryId: ecrRepository.registryId,
         });
+
         // Create Docker Image
         const image = new docker.Image(`${nameTag}_docker_image`, {
             build: {
