@@ -45,8 +45,7 @@ export const PyLambdaImageFactory =
         });
 
         // Create Docker Image
-        const image = new docker.Image(`${nameTag}_docker_image`, {
-            
+        const image = new docker.Image(`${nameTag}_docker_image`, { 
             build: {
                 args: {
                     BUILDKIT_INLINE_CACHE: "1",
