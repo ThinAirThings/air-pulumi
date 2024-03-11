@@ -55,6 +55,7 @@ export const PyLambdaImageFactory =
                 server: ecrRepository.repositoryUrl,
                 password: pulumi.secret(ecrAuthToken.apply(authToken => authToken.password)),
             }
+
         })
         // Create Lambda
         const lambda = new aws.lambda.Function(`${nameTag}_lambda`, {
