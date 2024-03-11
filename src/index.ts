@@ -4,3 +4,4 @@ export { createNameTag } from "./utils/createNameTag";
 // Public Components
 export { PublicBucket } from "./components/PublicBucket";
 export { RestApi } from "./components/RestApi";
+export { TsLambdaDynamoStreamCallback } from "./components/TsLambdaDynamoStreamCallback";
