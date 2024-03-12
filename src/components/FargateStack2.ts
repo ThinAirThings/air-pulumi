@@ -108,3 +108,5 @@ export const FargateStack2 = ({
         },
     })
 }
+
+
