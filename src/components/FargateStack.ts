@@ -1,8 +1,8 @@
-import { createNameTag } from "../utils/createNameTag";
+import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
-import * as pulumi from "@pulumi/pulumi";
-import { FargateService } from "./FargateService";
+import { createNameTag } from "../utils/createNameTag";
+import { EcrImage } from "./EcrImage";
 
 
 export const FargateStack = ({
@@ -12,65 +12,32 @@ export const FargateStack = ({
     tag: string
     services: {
         tag: string
-        imageUri: pulumi.Input<string>
+        dockerProjectPath: string
+        port: number
+        desiredCount: number
         environmentVariables?: Record<string, pulumi.Input<string>>
         pathPattern: string
     }[]
 }) => {
     // Create nametag
     const nameTag = createNameTag(tag).replaceAll("_", "-");
-    // Create a VPC
-    const vpc = new awsx.ec2.Vpc(`${nameTag}-vpc`, {});
-    const securityGroup = new aws.ec2.SecurityGroup(`${nameTag}-sg`, {
-        vpcId: vpc.vpcId,
-        egress: [{
-            fromPort: 0,
-            toPort: 0,
-            protocol: "-1",
-            cidrBlocks: ["0.0.0.0/0"]
-        }],
-        ingress: [{
-            fromPort: 80,
-            toPort: 80,
-            protocol: "tcp",
-            cidrBlocks: ["0.0.0.0/0"]
-        }, {
-            fromPort: 443,
-            toPort: 443,
-            protocol: "tcp",
-            cidrBlocks: ["0.0.0.0/0"]
-        }, {
-            fromPort: 3000,
-            toPort: 3000,
-            protocol: "tcp",
-            cidrBlocks: ["0.0.0.0/0"]
-        }]
-    })
-    // Create Cluster
-    const cluster = new aws.ecs.Cluster(`${nameTag}_ecs_cluster`, {});
-    // Create a new load balancer
-    const alb = new aws.lb.LoadBalancer(`${nameTag}-alb`, {
-        loadBalancerType: "application",
-        internal: false,
-        subnets: vpc.publicSubnetIds,
-        securityGroups: [securityGroup.id]
+    // Create LoadBalancer
+    const lb = new awsx.lb.ApplicationLoadBalancer(`${nameTag}-lb`, {
+        listener: {
+            port: 443,
+            protocol: "HTTPS",
+            certificateArn: new pulumi.Config().require("certificateArn"),
+            defaultActions: [{
+                type: "fixed-response",
+                fixedResponse: {
+                    contentType: "text/plain",
+                    messageBody: "Default Target GG Load Balancer",
+                    statusCode: "200"
+                }
+            }], 
+        },
     });
 
-    // Create a listener
-    const listener = new aws.lb.Listener(`${nameTag}-listener`, {
-        loadBalancerArn: alb.arn,
-        port: 443,
-        protocol: "HTTPS",
-        certificateArn: new pulumi.Config().require("certificateArn"),
-        defaultActions: [{
-            type: "fixed-response",
-            fixedResponse: {
-                contentType: "text/plain",
-                messageBody: "Default Target GG Load Balancer",
-                statusCode: "200"
-            }
-        }]
-    });
     // Create CNAME Record
     const zone = aws.route53.getZoneOutput({
         name: new pulumi.Config().require("rootDomain"),
@@ -81,26 +48,58 @@ export const FargateStack = ({
         name: domainName,
         type: "CNAME",
         ttl: 300,
-        records: [alb.dnsName]
+        records: [lb.loadBalancer.dnsName]
     });
-
-    // Create services
-    const createdServices = services.map((service, index) => {
-        return FargateService({
-            ...service,
-            cluster,
-            vpc,
-            securityGroup,
-            applicationLoadBalancer: alb,
-            listener
+    const cluster = new aws.ecs.Cluster(`${nameTag}-ecscluster`);
+    services.map((service, idx) => {
+        const serviceNameTag = `${createNameTag(service.tag)}`.replaceAll("_", "-");
+        // Create Load Balancer Target
+        const targetGroup = new aws.lb.TargetGroup(`${serviceNameTag}-tg`, {
+            port: service.port,
+            vpcId: lb.loadBalancer.vpcId,
+            protocol: "HTTP",
+            targetType: "ip",
         });
+        // Create Listener Rule
+        new aws.lb.ListenerRule(`${serviceNameTag}-listener-rule`, {
+            listenerArn: lb.listeners.apply(l => l![0].arn),
+            priority: idx+1,
+            actions: [{
+                type: "forward",
+                targetGroupArn: targetGroup.arn
+            }],
+            conditions: [{
+                pathPattern: {
+                    values: [`${service.pathPattern}/*`]
+                }
+            }]
+        });
+        const ecrRepo = EcrImage({
+            tag: `${serviceNameTag}-ecr-repo`,
+            dockerProjectPath: service.dockerProjectPath,
+        })
+
+        const fargateService = new awsx.ecs.FargateService(`${serviceNameTag}-fargatesvc`, {
+            cluster: cluster.arn,
+            assignPublicIp: true,
+            desiredCount: service.desiredCount,
+            taskDefinitionArgs: {
+                container: {
+                    name: `${serviceNameTag}-container`,
+                    image: ecrRepo.imageName,
+                    cpu: 256,
+                    memory: 1024,
+                    essential: true,
+                    portMappings: [
+                        {
+                            containerPort: service.port,
+                            targetGroup: targetGroup,
+                        },
+                    ],
+                },
+            },
+        })
     });
-    return {
-        vpc,
-        cluster,
-        securityGroup,
-        alb,
-        listener,
-        domainName
-    };
 }
+
+
