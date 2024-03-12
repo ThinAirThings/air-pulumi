@@ -68,13 +68,14 @@ export const FargateService = ({
             subnets: vpc.publicSubnetIds,
             securityGroups: [securityGroup.id],
         },
-        continueBeforeSteadyState: true,
+        continueBeforeSteadyState: false,
         forceNewDeployment: true,
         taskDefinitionArgs: {
             container:{
                 name: `${nameTag}-container`,
                 image: imageUri,
-                memory: 512,
+                cpu: 256,
+                memory: 1024,
                 portMappings: [{
                     targetGroup
                 }],
