@@ -54,7 +54,7 @@ export const FargateStack = ({
     services.map((service, idx) => {
         const serviceNameTag = `${createNameTag(service.tag)}`.replaceAll("_", "-");
         // Create Load Balancer Target
-        const targetGroup = new aws.lb.TargetGroup(`${serviceNameTag}-tg`, {
+        const targetGroup = new aws.lb.TargetGroup(`${service.tag}-tg`, {
             port: service.port,
             vpcId: lb.loadBalancer.vpcId,
             protocol: "HTTP",
