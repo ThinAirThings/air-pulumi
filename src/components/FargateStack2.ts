@@ -32,7 +32,12 @@ export const FargateStack2 = ({
                     messageBody: "Default Target GG Load Balancer",
                     statusCode: "200"
                 }
-            }]
+            }], 
+        },
+        defaultTargetGroup: {
+            port: 3000,
+            protocol: "HTTP",
+            targetType: "ip",
         }
     });
 
