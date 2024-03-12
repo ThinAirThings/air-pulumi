@@ -23,6 +23,7 @@ export const FargateService = ({
     const targetGroup = new aws.lb.TargetGroup(`${nameTag}-tg`, {
         port: 80,
         vpcId: applicationLoadBalancer.vpcId.apply(vpcId => vpcId!),
+
         protocol: "HTTP",
         targetType: "ip",
         healthCheck: {
