@@ -51,7 +51,7 @@ export const FargateStack2 = ({
     });
     const cluster = new aws.ecs.Cluster(`${nameTag}-ecscluster`);
     services.map(service => {
-        const serviceNameTag = `${createNameTag(service.tag)}`;
+        const serviceNameTag = `${createNameTag(service.tag)}`.replaceAll("_", "-");
         // Create Load Balancer Target
         const targetGroup = new aws.lb.TargetGroup(`${serviceNameTag}-tg`, {
             port: service.port,
