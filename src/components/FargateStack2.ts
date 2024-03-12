@@ -77,6 +77,7 @@ export const FargateStack2 = ({
             tag: `${serviceNameTag}-ecr-repo`,
             dockerProjectPath: service.dockerProjectPath,
         })
+
         const fargateService = new awsx.ecs.FargateService(`${serviceNameTag}-fargatesvc`, {
             cluster: cluster.arn,
             assignPublicIp: true,
