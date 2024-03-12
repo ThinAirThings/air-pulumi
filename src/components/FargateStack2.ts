@@ -66,7 +66,7 @@ export const FargateStack2 = ({
                 essential: true,
                 portMappings: [
                     {
-                        containerPort: 80,
+                        containerPort: 3000,
                         targetGroup: lb.defaultTargetGroup,
                     },
                 ],
