@@ -62,7 +62,7 @@ export const FargateStack2 = ({
         // Create Listener Rule
         new aws.lb.ListenerRule(`${serviceNameTag}-listener-rule`, {
             listenerArn: lb.listeners.apply(l => l![0].arn),
-            priority: idx,
+            priority: idx+1,
             actions: [{
                 type: "forward",
                 targetGroupArn: targetGroup.arn
