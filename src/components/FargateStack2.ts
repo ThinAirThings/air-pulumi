@@ -13,6 +13,7 @@ export const FargateStack2 = ({
     services: {
         tag: string
         dockerProjectPath: string
+        port: number
         environmentVariables?: Record<string, pulumi.Input<string>>
         pathPattern: string
     }[]
@@ -35,27 +36,7 @@ export const FargateStack2 = ({
             }], 
         },
     });
-    // Create Load Balancer Target
-    const targetGroup = new aws.lb.TargetGroup(`${nameTag}-tg`, {
-        port: 3000,
-        vpcId: lb.loadBalancer.vpcId,
-        protocol: "HTTP",
-        targetType: "ip",
-    });
-    // Create Listener Rule
-    new aws.lb.ListenerRule(`${nameTag}-listener-rule`, {
-        listenerArn: lb.listeners.apply(l => l![0].arn),
-        priority: 10,
-        actions: [{
-            type: "forward",
-            targetGroupArn: targetGroup.arn
-        }],
-        conditions: [{
-            pathPattern: {
-                values: [`/*`]
-            }
-        }]
-    });
+
     // Create CNAME Record
     const zone = aws.route53.getZoneOutput({
         name: new pulumi.Config().require("rootDomain"),
@@ -71,6 +52,27 @@ export const FargateStack2 = ({
     const cluster = new aws.ecs.Cluster(`${nameTag}-ecscluster`);
     services.map(service => {
         const serviceNameTag = `${createNameTag(service.tag)}`;
+        // Create Load Balancer Target
+        const targetGroup = new aws.lb.TargetGroup(`${serviceNameTag}-tg`, {
+            port: service.port,
+            vpcId: lb.loadBalancer.vpcId,
+            protocol: "HTTP",
+            targetType: "ip",
+        });
+        // Create Listener Rule
+        new aws.lb.ListenerRule(`${serviceNameTag}-listener-rule`, {
+            listenerArn: lb.listeners.apply(l => l![0].arn),
+            priority: 10,
+            actions: [{
+                type: "forward",
+                targetGroupArn: targetGroup.arn
+            }],
+            conditions: [{
+                pathPattern: {
+                    values: [`${service.pathPattern}/*`]
+                }
+            }]
+        });
         const ecrRepo = EcrImage({
             tag: `${serviceNameTag}-ecr-repo`,
             dockerProjectPath: service.dockerProjectPath,
@@ -88,7 +90,7 @@ export const FargateStack2 = ({
                     essential: true,
                     portMappings: [
                         {
-                            containerPort: 3000,
+                            containerPort: service.port,
                             targetGroup: targetGroup,
                         },
                     ],
