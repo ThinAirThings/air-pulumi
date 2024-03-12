@@ -68,8 +68,8 @@ export const FargateService = ({
             subnets: vpc.publicSubnetIds,
             securityGroups: [securityGroup.id],
         },
-        continueBeforeSteadyState: false,
-        forceNewDeployment: true,
+        // continueBeforeSteadyState: false,
+        // // forceNewDeployment: true,
         taskDefinitionArgs: {
             container:{
                 name: `${nameTag}-container`,
