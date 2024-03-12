@@ -34,13 +34,28 @@ export const FargateStack2 = ({
                 }
             }], 
         },
-        defaultTargetGroup: {
-            port: 3000,
-            protocol: "HTTP",
-            targetType: "ip",
-        }
+        // defaultTargetGroup: {
+        //     port: 3000,
+        //     protocol: "HTTP",
+        //     targetType: "ip",
+        // }
     });
-
+    // Create Load Balancer Target
+    const targetGroup = new aws.lb.TargetGroup(`${nameTag}-tg`, {
+        port: 3000,
+        vpcId: lb.loadBalancer.vpcId,
+        protocol: "HTTP",
+        targetType: "ip",
+        // healthCheck: {
+        //     path: `${pathPattern}/health`,
+        //     unhealthyThreshold: 10,
+        //     healthyThreshold: 2,
+        //     timeout: 7,
+        //     protocol: "HTTP",
+        //     interval: 8,
+        //     matcher: "200",
+        // }
+    });
     // Create CNAME Record
     const zone = aws.route53.getZoneOutput({
         name: new pulumi.Config().require("rootDomain"),
@@ -72,7 +87,7 @@ export const FargateStack2 = ({
                 portMappings: [
                     {
                         containerPort: 3000,
-                        targetGroup: lb.defaultTargetGroup,
+                        targetGroup: targetGroup,
                     },
                 ],
             },
