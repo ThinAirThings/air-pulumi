@@ -48,6 +48,7 @@ export const FargateService = ({
     // Create a Fargate Service
     const fargateService = new awsx.ecs.FargateService(`${nameTag}-service`, {
         cluster: cluster.arn,
+        assignPublicIp: true,
         taskDefinitionArgs: {
             containers: {
                 app: {
@@ -55,7 +56,8 @@ export const FargateService = ({
                     image: imageUri,
                     memory: 512,
                     portMappings: [{
-                        targetGroup // Replace with the port your socket.io app listens on
+                        targetGroup, // Replace with the port your socket.io app listens on
+                        containerPort: 3000,
                     }],
                     environment: [
                         // Define your environment variables here if needed
