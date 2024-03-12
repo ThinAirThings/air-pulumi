@@ -31,7 +31,7 @@ export const FargateStack = ({
         }, {
             fromPort: 3000,
             toPort: 3000,
-            protocol: "txp",
+            protocol: "tcp",
             securityGroups: ["0.0.0.0/0"]
         }],
         ingress: [{
