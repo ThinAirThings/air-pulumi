@@ -50,7 +50,7 @@ export const FargateStack2 = ({
         records: [lb.loadBalancer.dnsName]
     });
     const cluster = new aws.ecs.Cluster(`${nameTag}-ecscluster`);
-    services.map(service => {
+    services.map((service, idx) => {
         const serviceNameTag = `${createNameTag(service.tag)}`.replaceAll("_", "-");
         // Create Load Balancer Target
         const targetGroup = new aws.lb.TargetGroup(`${serviceNameTag}-tg`, {
@@ -62,7 +62,7 @@ export const FargateStack2 = ({
         // Create Listener Rule
         new aws.lb.ListenerRule(`${serviceNameTag}-listener-rule`, {
             listenerArn: lb.listeners.apply(l => l![0].arn),
-            priority: 10,
+            priority: idx,
             actions: [{
                 type: "forward",
                 targetGroupArn: targetGroup.arn
