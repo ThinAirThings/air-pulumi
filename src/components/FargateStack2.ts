@@ -35,6 +35,18 @@ export const FargateStack2 = ({
             }]
         }
     });
+    // Create CNAME Record
+    const zone = aws.route53.getZoneOutput({
+        name: new pulumi.Config().require("rootDomain"),
+    });
+    const domainName = `${pulumi.getStack() === 'prod' ? tag : `${pulumi.getStack()}-${tag}2.dev.`}${new pulumi.Config().require("rootDomain")}`;
+    new aws.route53.Record(`${nameTag}_cname`, {
+        zoneId: zone.zoneId,
+        name: domainName,
+        type: "CNAME",
+        ttl: 300,
+        records: [lb.loadBalancer.dnsName]
+    });
     const cluster = new aws.ecs.Cluster(`${nameTag}_ecscluster`);
     const ecrRepo = EcrImage({
         tag: `${nameTag}-ecr-repo`,
