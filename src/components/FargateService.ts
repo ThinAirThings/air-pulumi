@@ -75,8 +75,7 @@ export const FargateService = ({
                     image: imageUri,
                     memory: 512,
                     portMappings: [{
-                        containerPort: 3000, // Replace with the port your socket.io app listens on
-                        hostPort: 3000,
+                        targetGroup
                     }],
                     environment: [
                         // Define your environment variables here if needed
@@ -86,9 +85,6 @@ export const FargateService = ({
         },
         desiredCount: 1,
     });
-    new aws.alb.TargetGroupAttachment(`${nameTag}-tg-attachment`, {
-        targetGroupArn: targetGroup.arn,
-        targetId: fargateService.service.id
-    });
+
     return fargateService;
 }
