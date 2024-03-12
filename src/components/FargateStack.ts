@@ -2,12 +2,20 @@ import { createNameTag } from "../utils/createNameTag";
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
 import * as pulumi from "@pulumi/pulumi";
+import { FargateService } from "./FargateService";
 
 
 export const FargateStack = ({
-    tag
+    tag,
+    services
 }: {
     tag: string
+    services: {
+        tag: string
+        imageUri: pulumi.Input<string>
+        environmentVariables?: Record<string, pulumi.Input<string>>
+        pathPattern: string
+    }[]
 }) => {
     // Create nametag
     const nameTag = createNameTag(tag).replaceAll("_", "-");
@@ -70,6 +78,17 @@ export const FargateStack = ({
         type: "CNAME",
         ttl: 300,
         records: [alb.dnsName]
+    });
+    // Create services
+    const createdServices = services.map((service, index) => {
+        return FargateService({
+            ...service,
+            cluster,
+            vpc,
+            securityGroup,
+            applicationLoadBalancer: alb,
+            listener
+        });
     });
     return {
         vpc,
