@@ -39,6 +39,11 @@ export const FargateStack = ({
             toPort: 443,
             protocol: "tcp",
             cidrBlocks: ["0.0.0.0/0"]
+        }, {
+            fromPort: 3000,
+            toPort: 3000,
+            protocol: "tcp",
+            cidrBlocks: ["0.0.0.0/0"]
         }]
     })
     // Create Cluster
