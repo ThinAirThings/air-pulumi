@@ -2,6 +2,7 @@ import { createNameTag } from "../utils/createNameTag";
 import * as aws from "@pulumi/aws";
 import * as pulumi from "@pulumi/pulumi";
 import * as awsx from "@pulumi/awsx";
+import path = require("path");
 
 export const FargateService = ({
     tag,
@@ -9,7 +10,8 @@ export const FargateService = ({
     applicationLoadBalancer,
     listener,
     imageUri,
-    environmentVariables
+    environmentVariables,
+    pathPattern
 }: {
     tag: string
     cluster: aws.ecs.Cluster
@@ -17,6 +19,7 @@ export const FargateService = ({
     listener: aws.lb.Listener
     imageUri: pulumi.Input<string>
     environmentVariables?: Record<string, pulumi.Input<string>>
+    pathPattern: string
 }) => {
     // Create nametag
     const nameTag = createNameTag(tag).replaceAll("_", "-");
@@ -28,7 +31,7 @@ export const FargateService = ({
         protocol: "HTTP",
         targetType: "ip",
         healthCheck: {
-            path: "/health",
+            path: `${pathPattern}/health`,
             protocol: "HTTP",
             interval: 30,
             matcher: "200-299",
@@ -44,7 +47,7 @@ export const FargateService = ({
         }],
         conditions: [{
             pathPattern: {
-                values: ["/"]
+                values: [`${pathPattern}/*`]
             }
         }]
     });
@@ -63,14 +66,7 @@ export const FargateService = ({
                     }],
                     environment: [
                         // Define your environment variables here if needed
-                    ],
-                    healthCheck: {
-                        command: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"],
-                        interval: 30,
-                        timeout: 5,
-                        retries: 3,
-                        startPeriod: 60,
-                    }
+                    ]
                 },
             },
         },
