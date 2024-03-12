@@ -78,6 +78,7 @@ export const FargateStack = ({
         ttl: 300,
         records: [alb.dnsName]
     });
+
     // Create services
     const createdServices = services.map((service, index) => {
         return FargateService({
