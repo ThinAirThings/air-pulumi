@@ -68,13 +68,16 @@ export const FargateService = ({
             subnets: vpc.privateSubnetIds,
             securityGroups: [securityGroup.id],
         },
+        assignPublicIp: true,
         taskDefinitionArgs: {
             containers: {
                 app: {
                     name: `${nameTag}-app`,
                     image: imageUri,
                     memory: 512,
+                    essential: true,
                     portMappings: [{
+                        containerPort: 3000,
                         targetGroup
                     }],
                     environment: [
