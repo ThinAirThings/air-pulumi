@@ -59,7 +59,6 @@ export const FargateService = ({
                     memory: 512,
                     portMappings: [{
                         targetGroup, // Replace with the port your socket.io app listens on
-                        containerPort: 3000,
                     }],
                     environment: [
                         // Define your environment variables here if needed
