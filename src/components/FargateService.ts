@@ -88,6 +88,9 @@ export const FargateService = ({
         },
         desiredCount: 1,
     });
-
+    new aws.lb.TargetGroupAttachment(`${nameTag}-tg-attachment`, {
+        targetGroupArn: targetGroup.arn,
+        targetId: fargateService.service.id
+    });
     return fargateService;
 }
