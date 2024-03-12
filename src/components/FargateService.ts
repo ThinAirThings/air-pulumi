@@ -68,21 +68,22 @@ export const FargateService = ({
             subnets: vpc.publicSubnetIds,
             securityGroups: [securityGroup.id],
         },
-        // continueBeforeSteadyState: false,
-        // // forceNewDeployment: true,
+        // assignPublicIp: true,
         taskDefinitionArgs: {
-            container:{
-                name: `${nameTag}-container`,
-                image: imageUri,
-                cpu: 256,
-                memory: 1024,
-                portMappings: [{
-                    targetGroup,
-                    containerPort: 3000
-                }],
-                environment: [
-                    // Define your environment variables here if needed
-                ]
+            containers: {
+                app: {
+                    name: `${nameTag}-app`,
+                    image: imageUri,
+                    memory: 512,
+                    essential: true,
+                    portMappings: [{
+                        containerPort: 3000,
+                        targetGroup
+                    }],
+                    environment: [
+                        // Define your environment variables here if needed
+                    ]
+                },
             },
         },
         desiredCount: 1,
@@ -90,6 +91,6 @@ export const FargateService = ({
     new aws.lb.TargetGroupAttachment(`${nameTag}-tg-attachment`, {
         targetGroupArn: targetGroup.arn,
         targetId: fargateService.service.id
-    })
+    });
     return fargateService;
 }
