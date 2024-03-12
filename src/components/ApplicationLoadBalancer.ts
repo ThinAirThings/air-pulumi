@@ -69,6 +69,7 @@ export const ApplicationLoadBalancer = ({
     });
     return {
         alb,
-        listener
+        listener,
+        domainName
     };
 }
