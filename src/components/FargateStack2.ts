@@ -15,7 +15,7 @@ export const FargateStack2 = ({
         dockerProjectPath: string
         environmentVariables?: Record<string, pulumi.Input<string>>
         pathPattern: string
-    }
+    }[]
 }) => {
     // Create nametag
     const nameTag = createNameTag(tag).replaceAll("_", "-");
@@ -34,11 +34,6 @@ export const FargateStack2 = ({
                 }
             }], 
         },
-        // defaultTargetGroup: {
-        //     port: 3000,
-        //     protocol: "HTTP",
-        //     targetType: "ip",
-        // }
     });
     // Create Load Balancer Target
     const targetGroup = new aws.lb.TargetGroup(`${nameTag}-tg`, {
@@ -46,15 +41,6 @@ export const FargateStack2 = ({
         vpcId: lb.loadBalancer.vpcId,
         protocol: "HTTP",
         targetType: "ip",
-        // healthCheck: {
-        //     path: `${pathPattern}/health`,
-        //     unhealthyThreshold: 10,
-        //     healthyThreshold: 2,
-        //     timeout: 7,
-        //     protocol: "HTTP",
-        //     interval: 8,
-        //     matcher: "200",
-        // }
     });
     // Create Listener Rule
     new aws.lb.ListenerRule(`${nameTag}-listener-rule`, {
@@ -83,30 +69,33 @@ export const FargateStack2 = ({
         records: [lb.loadBalancer.dnsName]
     });
     const cluster = new aws.ecs.Cluster(`${nameTag}-ecscluster`);
-    const ecrRepo = EcrImage({
-        tag: `${nameTag}-ecr-repo`,
-        dockerProjectPath: services.dockerProjectPath,
-    })
-    const service = new awsx.ecs.FargateService(`${nameTag}-fargatesvc`, {
-        cluster: cluster.arn,
-        assignPublicIp: true,
-        desiredCount: 2,
-        taskDefinitionArgs: {
-            container: {
-                name: `${nameTag}-container`,
-                image: ecrRepo.imageName,
-                cpu: 256,
-                memory: 1024,
-                essential: true,
-                portMappings: [
-                    {
-                        containerPort: 3000,
-                        targetGroup: targetGroup,
-                    },
-                ],
+    services.map(service => {
+        const serviceNameTag = `${createNameTag(service.tag)}`;
+        const ecrRepo = EcrImage({
+            tag: `${serviceNameTag}-ecr-repo`,
+            dockerProjectPath: service.dockerProjectPath,
+        })
+        const fargateService = new awsx.ecs.FargateService(`${serviceNameTag}-fargatesvc`, {
+            cluster: cluster.arn,
+            assignPublicIp: true,
+            desiredCount: 2,
+            taskDefinitionArgs: {
+                container: {
+                    name: `${serviceNameTag}-container`,
+                    image: ecrRepo.imageName,
+                    cpu: 256,
+                    memory: 1024,
+                    essential: true,
+                    portMappings: [
+                        {
+                            containerPort: 3000,
+                            targetGroup: targetGroup,
+                        },
+                    ],
+                },
             },
-        },
-    })
+        })
+    });
 }
 
 
