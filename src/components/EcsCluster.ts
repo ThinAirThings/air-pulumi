@@ -11,6 +11,8 @@ export const EcsCluster = ({
     const nameTag = createNameTag(tag).replaceAll("_", "-");
 
     // Create Cluster
-    const cluster = new aws.ecs.Cluster(`${nameTag}_ecs_cluster`);
+    const cluster = new aws.ecs.Cluster(`${nameTag}_ecs_cluster`, {
+        
+    });
     return cluster;
 }

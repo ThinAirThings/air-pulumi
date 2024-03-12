@@ -1,18 +1,20 @@
 import { createNameTag } from "../utils/createNameTag";
 import * as aws from "@pulumi/aws";
-import * as awsx from "@pulumi/awsx";
 import * as pulumi from "@pulumi/pulumi";
+import * as awsx from "@pulumi/awsx";
 
 export const FargateService = ({
     tag,
     cluster,
     applicationLoadBalancer,
+    listener,
     imageUri,
     environmentVariables
 }: {
     tag: string
     cluster: aws.ecs.Cluster
-    applicationLoadBalancer: awsx.lb.ApplicationLoadBalancer
+    applicationLoadBalancer: aws.lb.LoadBalancer
+    listener: aws.lb.Listener
     imageUri: pulumi.Input<string>
     environmentVariables?: Record<string, pulumi.Input<string>>
 }) => {
@@ -22,7 +24,7 @@ export const FargateService = ({
     // Create Load Balancer Target
     const targetGroup = new aws.lb.TargetGroup(`${nameTag}-tg`, {
         port: 80,
-        vpcId: applicationLoadBalancer.vpcId.apply(vpcId => vpcId!),
+        vpcId: applicationLoadBalancer.vpcId,
         protocol: "HTTP",
         targetType: "ip",
         healthCheck: {
@@ -33,7 +35,7 @@ export const FargateService = ({
     
     // Create Listener Rule
     new aws.lb.ListenerRule(`${nameTag}-listener-rule`, {
-        listenerArn: applicationLoadBalancer.listeners.apply((listeners) => listeners![0].arn),
+        listenerArn: listener.arn,
         actions: [{
             type: "forward",
             targetGroupArn: targetGroup.arn
@@ -47,7 +49,6 @@ export const FargateService = ({
     // Create a Fargate Service
     const fargateService = new awsx.ecs.FargateService(`${nameTag}-service`, {
         cluster: cluster.arn,
-        
         assignPublicIp: true,
         taskDefinitionArgs: {
             containers: {
