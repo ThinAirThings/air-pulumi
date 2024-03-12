@@ -30,7 +30,7 @@ export const FargateService = ({
 
     // Create Load Balancer Target
     const targetGroup = new aws.lb.TargetGroup(`${nameTag}-tg`, {
-        port: 80,
+        port: 3000,
         vpcId: applicationLoadBalancer.vpcId,
         protocol: "HTTP",
         targetType: "ip",
@@ -41,7 +41,7 @@ export const FargateService = ({
             timeout: 7,
             protocol: "HTTP",
             interval: 8,
-            matcher: "200-299",
+            matcher: "200",
         }
     });
     
@@ -75,8 +75,8 @@ export const FargateService = ({
                     image: imageUri,
                     memory: 512,
                     portMappings: [{
-                        containerPort: 80, // Replace with the port your socket.io app listens on
-                        hostPort: 80,
+                        containerPort: 3000, // Replace with the port your socket.io app listens on
+                        hostPort: 3000,
                     }],
                     environment: [
                         // Define your environment variables here if needed

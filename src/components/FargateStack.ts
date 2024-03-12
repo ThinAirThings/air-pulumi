@@ -46,9 +46,8 @@ export const FargateStack = ({
     // Create a new load balancer
     const alb = new aws.lb.LoadBalancer(`${nameTag}-alb`, {
         loadBalancerType: "application",
-        subnets: pulumi.all([vpc.publicSubnetIds, vpc.privateSubnetIds]).apply(([publicSubnetIds, privateSubnetIds]) => {
-            return publicSubnetIds.concat(privateSubnetIds);
-        }),
+        internal: false,
+        subnets: vpc.publicSubnetIds,
         securityGroups: [securityGroup.id]
     });
 
