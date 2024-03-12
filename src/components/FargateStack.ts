@@ -41,7 +41,7 @@ export const FargateStack = ({
             cidrBlocks: ["0.0.0.0/0"]
         }, {
             fromPort: 3000,
-            toPort: 3000,
+            toPort: 3999,
             protocol: "tcp",
             cidrBlocks: ["0.0.0.0/0"]
         }]
