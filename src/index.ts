@@ -8,3 +8,4 @@ export { TsLambdaDynamoStreamCallback } from "./components/TsLambdaDynamoStreamC
 export { EcrImage } from "./components/EcrImage";
 export { FargateService } from "./components/FargateService";
 export { ApplicationLoadBalancer } from "./components/ApplicationLoadBalancer";
+export { EcsCluster } from "./components/EcsCluster";
