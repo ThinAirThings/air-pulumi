@@ -68,6 +68,7 @@ export const FargateService = ({
             subnets: vpc.publicSubnetIds,
             securityGroups: [securityGroup.id],
         },
+        continueBeforeSteadyState: true,
         forceNewDeployment: true,
         // assignPublicIp: true,
         taskDefinitionArgs: {
