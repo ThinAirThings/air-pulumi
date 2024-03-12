@@ -35,6 +35,7 @@ export const FargateStack2 = ({
             }]
         }
     });
+
     // Create CNAME Record
     const zone = aws.route53.getZoneOutput({
         name: new pulumi.Config().require("rootDomain"),
