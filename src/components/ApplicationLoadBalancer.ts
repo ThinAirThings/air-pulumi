@@ -1,5 +1,6 @@
 import { createNameTag } from "../utils/createNameTag";
 import * as aws from "@pulumi/aws";
+import * as awsx from "@pulumi/awsx";
 import * as pulumi from "@pulumi/pulumi";
 export const ApplicationLoadBalancer = ({
     tag
@@ -8,10 +9,38 @@ export const ApplicationLoadBalancer = ({
 }) => {
     // Create nametag
     const nameTag = createNameTag(tag).replaceAll("_", "-");
+    // Create a VPC
+    const vpc = new awsx.ec2.Vpc(`${nameTag}-vpc`, {
+        cidrBlock: "10.0.0.0/16"
+    });
+    const securityGroup = new aws.ec2.SecurityGroup(`${nameTag}-sg`, {
+        vpcId: vpc.vpcId,
+        egress: [{
+            fromPort: 0,
+            toPort: 0,
+            protocol: "-1",
+            cidrBlocks: ["0.0.0.0/0"]
+        }],
+        ingress: [{
+            fromPort: 80,
+            toPort: 80,
+            protocol: "tcp",
+            cidrBlocks: ["0.0.0.0/0"]
+        }, {
+            fromPort: 443,
+            toPort: 443,
+            protocol: "tcp",
+            cidrBlocks: ["0.0.0.0/0"]
+        }]
+    })
     // Create a new load balancer
     const alb = new aws.lb.LoadBalancer(`${nameTag}-alb`, {
-        loadBalancerType: "application"
+        loadBalancerType: "application",
+        subnets: vpc.publicSubnetIds,
+        securityGroups: [securityGroup.id]
     });
+
+    // Create a listener
     const listener = new aws.lb.Listener(`${nameTag}-listener`, {
         loadBalancerArn: alb.arn,
         port: 443,
