@@ -59,7 +59,7 @@ export const ApplicationLoadBalancer = ({
     const zone = aws.route53.getZoneOutput({
         name: new pulumi.Config().require("rootDomain"),
     });
-    const domainName = `${pulumi.getStack() === 'prod' ? tag : `-${tag}.dev.`}${new pulumi.Config().require("rootDomain")}`;
+    const domainName = `${pulumi.getStack() === 'prod' ? tag : `${pulumi.getStack()}-${tag}.dev.`}${new pulumi.Config().require("rootDomain")}`;
     new aws.route53.Record(`${nameTag}_cname`, {
         zoneId: zone.zoneId,
         name: domainName,

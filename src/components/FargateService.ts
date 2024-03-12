@@ -28,8 +28,10 @@ export const FargateService = ({
         protocol: "HTTP",
         targetType: "ip",
         healthCheck: {
-            path: "/",
+            path: "/health",
             protocol: "HTTP",
+            interval: 30,
+            matcher: "200-299",
         }
     });
     
@@ -53,7 +55,6 @@ export const FargateService = ({
         taskDefinitionArgs: {
             containers: {
                 app: {
-                    
                     name: `${nameTag}-app`,
                     image: imageUri,
                     memory: 512,
@@ -63,6 +64,13 @@ export const FargateService = ({
                     environment: [
                         // Define your environment variables here if needed
                     ],
+                    healthCheck: {
+                        command: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"],
+                        interval: 30,
+                        timeout: 5,
+                        retries: 3,
+                        startPeriod: 60,
+                    }
                 },
             },
         },
