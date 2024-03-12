@@ -55,6 +55,18 @@ export const ApplicationLoadBalancer = ({
             }
         }]
     });
+    // Create CNAME Record
+    const zone = aws.route53.getZoneOutput({
+        name: new pulumi.Config().require("rootDomain"),
+    });
+    const domainName = `${pulumi.getStack() === 'prod' ? tag : `-${tag}.dev.`}${new pulumi.Config().require("rootDomain")}`;
+    new aws.route53.Record(`${nameTag}_cname`, {
+        zoneId: zone.zoneId,
+        name: domainName,
+        type: "CNAME",
+        ttl: 300,
+        records: [alb.dnsName]
+    });
     return {
         alb,
         listener
