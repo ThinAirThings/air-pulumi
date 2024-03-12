@@ -62,6 +62,7 @@ export const FargateService = ({
             subnets: vpc.publicSubnetIds,
             securityGroups: [securityGroup.id],
         },
+
         taskDefinitionArgs: {
             containers: {
                 app: {
