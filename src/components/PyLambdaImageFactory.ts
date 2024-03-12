@@ -10,10 +10,12 @@ export const PyLambdaImageFactory =
         tag,
         dockerProjectPath,
         environmentVariables,
+        timeout,
     }: {
         tag: string;
         dockerProjectPath: string;
-        environmentVariables?: Record<string, pulumi.Input<string>>
+        environmentVariables?: Record<string, pulumi.Input<string>>;
+        timeout?: number;
     }) => {
 
         // Create nametag
@@ -75,6 +77,7 @@ export const PyLambdaImageFactory =
             environment: {
                 variables: environmentVariables,
             },
+            timeout: timeout,
         });
         // Set Permissions
         new aws.iam.UserPolicyAttachment(`${nameTag}_policy_attachment`, {
