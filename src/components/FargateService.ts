@@ -36,8 +36,11 @@ export const FargateService = ({
         targetType: "ip",
         healthCheck: {
             path: `${pathPattern}/health`,
+            unhealthyThreshold: 10,
+            healthyThreshold: 2,
+            timeout: 7,
             protocol: "HTTP",
-            interval: 30,
+            interval: 8,
             matcher: "200-299",
         }
     });
@@ -45,6 +48,7 @@ export const FargateService = ({
     // Create Listener Rule
     new aws.lb.ListenerRule(`${nameTag}-listener-rule`, {
         listenerArn: listener.arn,
+        priority: 10,
         actions: [{
             type: "forward",
             targetGroupArn: targetGroup.arn
@@ -55,14 +59,15 @@ export const FargateService = ({
             }
         }]
     });
+
     // Create a Fargate Service
     const fargateService = new awsx.ecs.FargateService(`${nameTag}-service`, {
         cluster: cluster.arn,
+        enableExecuteCommand: true,
         networkConfiguration: {
-            subnets: vpc.publicSubnetIds,
+            subnets: vpc.privateSubnetIds,
             securityGroups: [securityGroup.id],
         },
-
         taskDefinitionArgs: {
             containers: {
                 app: {

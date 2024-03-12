@@ -2,7 +2,9 @@ import { createNameTag } from "../utils/createNameTag";
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
 import * as pulumi from "@pulumi/pulumi";
-export const ApplicationLoadBalancer = ({
+
+
+export const FargateStack = ({
     tag
 }: {
     tag: string
@@ -10,9 +12,7 @@ export const ApplicationLoadBalancer = ({
     // Create nametag
     const nameTag = createNameTag(tag).replaceAll("_", "-");
     // Create a VPC
-    const vpc = new awsx.ec2.Vpc(`${nameTag}-vpc`, {
-        cidrBlock: "10.0.0.0/16"
-    });
+    const vpc = new awsx.ec2.Vpc(`${nameTag}-vpc`, {});
     const securityGroup = new aws.ec2.SecurityGroup(`${nameTag}-sg`, {
         vpcId: vpc.vpcId,
         egress: [{
@@ -33,10 +33,14 @@ export const ApplicationLoadBalancer = ({
             cidrBlocks: ["0.0.0.0/0"]
         }]
     })
+    // Create Cluster
+    const cluster = new aws.ecs.Cluster(`${nameTag}_ecs_cluster`, {});
     // Create a new load balancer
     const alb = new aws.lb.LoadBalancer(`${nameTag}-alb`, {
         loadBalancerType: "application",
-        subnets: vpc.publicSubnetIds,
+        subnets: pulumi.all([vpc.publicSubnetIds, vpc.privateSubnetIds]).apply(([publicSubnetIds, privateSubnetIds]) => {
+            return publicSubnetIds.concat(privateSubnetIds);
+        }),
         securityGroups: [securityGroup.id]
     });
 
@@ -69,6 +73,7 @@ export const ApplicationLoadBalancer = ({
     });
     return {
         vpc,
+        cluster,
         securityGroup,
         alb,
         listener,

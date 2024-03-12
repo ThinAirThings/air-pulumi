@@ -7,5 +7,5 @@ export { RestApi } from "./components/RestApi";
 export { TsLambdaDynamoStreamCallback } from "./components/TsLambdaDynamoStreamCallback";
 export { EcrImage } from "./components/EcrImage";
 export { FargateService } from "./components/FargateService";
-export { ApplicationLoadBalancer } from "./components/ApplicationLoadBalancer";
+export { FargateStack } from "./components/FargateStack";
 export { EcsCluster } from "./components/EcsCluster";
