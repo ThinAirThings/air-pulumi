@@ -56,6 +56,20 @@ export const FargateStack2 = ({
         //     matcher: "200",
         // }
     });
+    // Create Listener Rule
+    new aws.lb.ListenerRule(`${nameTag}-listener-rule`, {
+        listenerArn: lb.listeners.apply(l => l![0].arn),
+        priority: 10,
+        actions: [{
+            type: "forward",
+            targetGroupArn: targetGroup.arn
+        }],
+        conditions: [{
+            pathPattern: {
+                values: [`/*`]
+            }
+        }]
+    });
     // Create CNAME Record
     const zone = aws.route53.getZoneOutput({
         name: new pulumi.Config().require("rootDomain"),
