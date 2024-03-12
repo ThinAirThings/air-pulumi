@@ -65,10 +65,10 @@ export const FargateService = ({
         cluster: cluster.arn,
         enableExecuteCommand: true,
         networkConfiguration: {
-            subnets: vpc.privateSubnetIds,
+            subnets: vpc.publicSubnetIds,
             securityGroups: [securityGroup.id],
         },
-        assignPublicIp: true,
+        // assignPublicIp: true,
         taskDefinitionArgs: {
             containers: {
                 app: {
