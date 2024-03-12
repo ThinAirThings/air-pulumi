@@ -77,7 +77,8 @@ export const FargateService = ({
                 cpu: 256,
                 memory: 1024,
                 portMappings: [{
-                    targetGroup
+                    targetGroup,
+                    containerPort: 3000
                 }],
                 environment: [
                     // Define your environment variables here if needed
@@ -86,5 +87,9 @@ export const FargateService = ({
         },
         desiredCount: 1,
     });
+    new aws.lb.TargetGroupAttachment(`${nameTag}-tg-attachment`, {
+        targetGroupArn: targetGroup.arn,
+        targetId: fargateService.service.id
+    })
     return fargateService;
 }
