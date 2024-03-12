@@ -50,12 +50,6 @@ export const PyLambdaImageFactory =
         const imageTag = `latest-${Math.floor(new Date().getTime() / 1000)}`
         const image = new docker.Image(`${nameTag}_docker_image`, { 
             build: {
-                // args: {
-                //     BUILDKIT_INLINE_CACHE: "1",
-                // },
-                // cacheFrom: {
-                //     images: [pulumi.interpolate`${ecrRepository.repositoryUrl}:latest`],
-                // },
                 platform: "linux/amd64",
                 context: `${dockerProjectPath}/`,
                 dockerfile: `${dockerProjectPath}/Dockerfile`
