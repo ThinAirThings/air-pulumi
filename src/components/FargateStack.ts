@@ -22,7 +22,7 @@ export const FargateStack = ({
     // Create nametag
     const nameTag = createNameTag(tag).replaceAll("_", "-");
     // Create LoadBalancer
-    const lb = new awsx.lb.ApplicationLoadBalancer(`${nameTag.split('-').slice(1, -1)}-lb`, {
+    const lb = new awsx.lb.ApplicationLoadBalancer(`${nameTag.split('-').slice(1, -1).join('-')}-lb`, {
         listener: {
             port: 443,
             protocol: "HTTPS",
