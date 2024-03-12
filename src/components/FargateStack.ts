@@ -28,11 +28,6 @@ export const FargateStack = ({
             toPort: 0,
             protocol: "-1",
             cidrBlocks: ["0.0.0.0/0"]
-        }, {
-            fromPort: 3000,
-            toPort: 3000,
-            protocol: "tcp",
-            securityGroups: ["0.0.0.0/0"]
         }],
         ingress: [{
             fromPort: 80,
