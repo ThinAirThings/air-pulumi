@@ -11,6 +11,7 @@ export const PyLambdaImageFactory =
             dockerProjectPath,
             environmentVariables,
             timeout,
+            memorySize
         }: {
             tag: string;
             dockerProjectPath: string;
