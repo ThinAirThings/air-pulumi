@@ -58,7 +58,6 @@ export const FargateService = ({
     // Create a Fargate Service
     const fargateService = new awsx.ecs.FargateService(`${nameTag}-service`, {
         cluster: cluster.arn,
-        assignPublicIp: true,
         networkConfiguration: {
             subnets: vpc.publicSubnetIds,
             securityGroups: [securityGroup.id],
