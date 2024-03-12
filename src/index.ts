@@ -8,4 +8,5 @@ export { TsLambdaDynamoStreamCallback } from "./components/TsLambdaDynamoStreamC
 export { EcrImage } from "./components/EcrImage";
 export { FargateService } from "./components/FargateService";
 export { FargateStack } from "./components/FargateStack";
+export {FargateStack2} from "./components/FargateStack2";
 export { EcsCluster } from "./components/EcsCluster";
