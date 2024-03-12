@@ -13,7 +13,7 @@ export const FargateService = ({
     tag: string
     cluster: aws.ecs.Cluster
     applicationLoadBalancer: awsx.lb.ApplicationLoadBalancer
-    imageUri: string
+    imageUri: pulumi.Input<string>
     environmentVariables?: Record<string, pulumi.Input<string>>
 }) => {
     // Create nametag
