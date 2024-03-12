@@ -23,7 +23,6 @@ export const FargateService = ({
     const targetGroup = new aws.lb.TargetGroup(`${nameTag}-tg`, {
         port: 80,
         vpcId: applicationLoadBalancer.vpcId.apply(vpcId => vpcId!),
-
         protocol: "HTTP",
         targetType: "ip",
         healthCheck: {
@@ -48,10 +47,12 @@ export const FargateService = ({
     // Create a Fargate Service
     const fargateService = new awsx.ecs.FargateService(`${nameTag}-service`, {
         cluster: cluster.arn,
+        
         assignPublicIp: true,
         taskDefinitionArgs: {
             containers: {
                 app: {
+                    
                     name: `${nameTag}-app`,
                     image: imageUri,
                     memory: 512,
