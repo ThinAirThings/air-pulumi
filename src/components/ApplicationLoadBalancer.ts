@@ -68,6 +68,8 @@ export const ApplicationLoadBalancer = ({
         records: [alb.dnsName]
     });
     return {
+        vpc,
+        securityGroup,
         alb,
         listener,
         domainName

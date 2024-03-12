@@ -7,6 +7,8 @@ import path = require("path");
 export const FargateService = ({
     tag,
     cluster,
+    vpc,
+    securityGroup,
     applicationLoadBalancer,
     listener,
     imageUri,
@@ -15,6 +17,8 @@ export const FargateService = ({
 }: {
     tag: string
     cluster: aws.ecs.Cluster
+    vpc: awsx.ec2.Vpc
+    securityGroup: aws.ec2.SecurityGroup
     applicationLoadBalancer: aws.lb.LoadBalancer
     listener: aws.lb.Listener
     imageUri: pulumi.Input<string>
@@ -55,6 +59,10 @@ export const FargateService = ({
     const fargateService = new awsx.ecs.FargateService(`${nameTag}-service`, {
         cluster: cluster.arn,
         assignPublicIp: true,
+        networkConfiguration: {
+            subnets: vpc.publicSubnetIds,
+            securityGroups: [securityGroup.id],
+        },
         taskDefinitionArgs: {
             containers: {
                 app: {
