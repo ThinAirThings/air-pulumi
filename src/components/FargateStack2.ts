@@ -20,7 +20,7 @@ export const FargateStack2 = ({
     // Create nametag
     const nameTag = createNameTag(tag).replaceAll("_", "-");
     // Create LoadBalancer
-    const lb = new awsx.lb.ApplicationLoadBalancer(`${nameTag}_lb`, {
+    const lb = new awsx.lb.ApplicationLoadBalancer(`${nameTag}-lb`, {
         listener: {
             port: 443,
             protocol: "HTTPS",
@@ -47,18 +47,18 @@ export const FargateStack2 = ({
         ttl: 300,
         records: [lb.loadBalancer.dnsName]
     });
-    const cluster = new aws.ecs.Cluster(`${nameTag}_ecscluster`);
+    const cluster = new aws.ecs.Cluster(`${nameTag}-ecscluster`);
     const ecrRepo = EcrImage({
         tag: `${nameTag}-ecr-repo`,
         dockerProjectPath: services.dockerProjectPath,
     })
-    const service = new awsx.ecs.FargateService(`${nameTag}_fargatesvc`, {
+    const service = new awsx.ecs.FargateService(`${nameTag}-fargatesvc`, {
         cluster: cluster.arn,
         assignPublicIp: true,
         desiredCount: 2,
         taskDefinitionArgs: {
             container: {
-                name: `${nameTag}_container`,
+                name: `${nameTag}-container`,
                 image: ecrRepo.imageName,
                 cpu: 256,
                 memory: 1024,
