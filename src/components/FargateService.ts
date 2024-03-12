@@ -20,7 +20,7 @@ export const FargateService = ({
     const nameTag = createNameTag(tag).replaceAll("_", "-");
 
     // Create Load Balancer Target
-    const targetGroup = new aws.lb.TargetGroup(`${nameTag}-target-group`, {
+    const targetGroup = new aws.lb.TargetGroup(`${nameTag}-tg`, {
         port: 80,
         protocol: "HTTP",
         targetType: "ip",
