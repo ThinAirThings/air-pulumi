@@ -71,18 +71,16 @@ export const FargateService = ({
         continueBeforeSteadyState: true,
         forceNewDeployment: true,
         taskDefinitionArgs: {
-            containers: {
-                app: {
-                    name: `${nameTag}-app`,
-                    image: imageUri,
-                    memory: 512,
-                    portMappings: [{
-                        targetGroup
-                    }],
-                    environment: [
-                        // Define your environment variables here if needed
-                    ]
-                },
+            container:{
+                name: `${nameTag}-container`,
+                image: imageUri,
+                memory: 512,
+                portMappings: [{
+                    targetGroup
+                }],
+                environment: [
+                    // Define your environment variables here if needed
+                ]
             },
         },
         desiredCount: 1,
