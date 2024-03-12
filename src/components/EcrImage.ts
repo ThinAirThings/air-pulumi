@@ -28,6 +28,7 @@ export const EcrImage = ({
             platform: "linux/amd64",
             context: `${dockerProjectPath}/`,
             dockerfile: `${dockerProjectPath}/Dockerfile`
+            
         },
         imageName: pulumi.interpolate`${ecrRepository.repositoryUrl}:${imageTag}`,
         registry: {

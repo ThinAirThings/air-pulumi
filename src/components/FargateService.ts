@@ -70,14 +70,12 @@ export const FargateService = ({
         },
         continueBeforeSteadyState: true,
         forceNewDeployment: true,
-        // assignPublicIp: true,
         taskDefinitionArgs: {
             containers: {
                 app: {
                     name: `${nameTag}-app`,
                     image: imageUri,
                     memory: 512,
-                    essential: true,
                     portMappings: [{
                         targetGroup
                     }],
