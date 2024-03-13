@@ -23,17 +23,18 @@
     },
     "peerDependencies": {
         "@pulumi/aws": "^6.0.0",
-        "@pulumi/pulumi": "^3.103.1",
-        "@pulumiverse/vercel": "^1.0.1",
+        "@pulumi/aws-apigateway": "^2.4.0",
         "@pulumi/awsx": "^2.5.0",
         "@pulumi/docker": "^4.5.1",
-        "@pulumi/aws-apigateway": "^2.4.0"
+        "@pulumi/pulumi": "^3.103.1",
+        "@pulumiverse/vercel": "^1.0.1"
     },
     "keywords": [],
     "author": "Dan Lannan",
     "dependencies": {
         "@aws-sdk/util-dynamodb": "^3.529.1",
         "@thinairthings/air-dynamodb": "^0.1.15",
+        "@thinairthings/air-graph": "^0.1.24",
         "zod": "^3.22.4"
     }
 }

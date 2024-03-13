@@ -100,6 +100,7 @@ export const FargateStack = ({
                 },
             },
         })
+        // Add role permissions
     });
 }
 

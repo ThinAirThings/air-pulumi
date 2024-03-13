@@ -7,6 +7,7 @@ import { TsLambdaCallbackFactory } from "../components/TsLambdaCallbackFactory";
 import { PyLambdaCallbackFactory } from "../components/PyLambdaCallbackFactory";
 import { getDynamoTableFactory } from "../getters/getDynamoTableFactory";
 import { PyLambdaImageFactory } from "../components/PyLambdaImageFactory";
+import { NodeTableFactory } from "../components/NodeTableFactory";
 
 export const configAirPulumi = () => {
     // Create IAM User
@@ -17,36 +18,13 @@ export const configAirPulumi = () => {
     const accessKey = new aws.iam.AccessKey(createNameTag("accessKey"), {
         user: iamUser.name,
     });
+    
     const DynamoTable = DynamoTableFactory(iamUser);
     return {
         iamUser,
         accessKey,
         DynamoTable,
-        NodeTable: ({
-            nodeType,
-            version,
-            streamEnabled,
-            streamViewType
-        }:{
-            nodeType: string, 
-            version?: number
-            streamEnabled?: boolean
-            streamViewType?: "NEW_IMAGE" | "OLD_IMAGE" | "NEW_AND_OLD_IMAGES" | "KEYS_ONLY"
-        }) => DynamoTable({
-            tag: `${nodeType}_node`,
-            version: version || 1,
-            hashKey: "parentNodeId",
-            rangeKey: "nodeId",
-            attributes: [{
-                name: "parentNodeId",
-                type: "S"
-            },{
-                name: "nodeId",
-                type: "S"
-            }],
-            streamEnabled,
-            streamViewType
-        }),
+        NodeTable: NodeTableFactory(DynamoTable),
         getDynamoTable: getDynamoTableFactory(iamUser),
         VercelDeployment: VercelDeploymentFactory(accessKey),
         TsLambdaCallback: TsLambdaCallbackFactory(iamUser),
