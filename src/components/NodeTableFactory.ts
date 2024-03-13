@@ -7,7 +7,7 @@ export const NodeTableFactory = (
     DynamoTable: ReturnType<typeof DynamoTableFactory>
 ) => <
     N extends AirNode<any, any>,
-    PT extends N extends AirNode<infer PT, any> ? PT : never,
+    PT extends N extends AirNode<infer PT, any> ? PT : never=N extends AirNode<infer PT, any> ? PT : never,
     T extends N extends AirNode<any, infer T> ? T : never=N extends AirNode<any, infer T> ? T : never,
 >({
     parentNodeType,
