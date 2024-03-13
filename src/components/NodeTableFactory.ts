@@ -7,13 +7,16 @@ export const NodeTableFactory = (
     DynamoTable: ReturnType<typeof DynamoTableFactory>
 ) => <
     N extends AirNode<any, any>,
+    PT extends N extends AirNode<infer PT, any> ? PT : never,
     T extends N extends AirNode<any, infer T> ? T : never=N extends AirNode<any, infer T> ? T : never,
 >({
+    parentNodeType,
     nodeType,
     version,
     streamEnabled,
     streamViewType
 }: {
+    parentNodeType: PT
     nodeType: T
     version?: number
     streamEnabled?: boolean
@@ -21,7 +24,7 @@ export const NodeTableFactory = (
 }) => DynamoTable({
     tag: `${nodeType}_node`,
     version: version || 1,
-    hashKey: "parentNodeId",
+    hashKey: `parentNodeId`,
     rangeKey: "nodeId",
     attributes: [{
         name: "parentNodeId",
