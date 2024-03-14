@@ -81,14 +81,14 @@ export const VercelDeploymentFactory =
         if (pulumi.getStack() === "prod") {
             // Create Apex-domain
             const domainName = new pulumi.Config().require("rootDomain");
-            new vercel.ProjectDomain(
-                `${nameTag}_domain`,
-                {
-                    domain: domainName,
-                    projectId: projectId,
-                },
-                { provider },
-            );
+            // new vercel.ProjectDomain(
+            //     `${nameTag}_domain`,
+            //     {
+            //         domain: domainName,
+            //         projectId: projectId,
+            //     },
+            //     { provider },
+            // );
             new aws.route53.Record(`${nameTag}_ARecord`, {
                 zoneId: zone.zoneId,
                 name: domainName,
