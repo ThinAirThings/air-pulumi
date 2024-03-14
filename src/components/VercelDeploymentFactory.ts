@@ -99,14 +99,14 @@ export const VercelDeploymentFactory =
         } else {
             // Create Sub-domain
             const domainName = `${pulumi.getStack()}.dev.${new pulumi.Config().require("rootDomain")}`;
-            new vercel.ProjectDomain(
-                `${nameTag}_domain`,
-                {
-                    domain: domainName,
-                    projectId: projectId,
-                },
-                { provider },
-            );
+            // new vercel.ProjectDomain(
+            //     `${nameTag}_domain`,
+            //     {
+            //         domain: domainName,
+            //         projectId: projectId,
+            //     },
+            //     { provider },
+            // );
             new aws.route53.Record(`${nameTag}_CNAMERecord`, {
                 zoneId: zone.zoneId,
                 name: domainName,
