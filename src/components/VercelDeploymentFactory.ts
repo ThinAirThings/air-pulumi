@@ -14,7 +14,7 @@ export const VercelDeploymentFactory =
     }: {
         tag: string;
         githubRepo: string;
-        projectId?: pulumi.Output<string>;
+        projectId: string;
         apiToken: pulumi.Output<string>;
         environmentVariables?: {
             key: string;
@@ -28,21 +28,7 @@ export const VercelDeploymentFactory =
             apiToken: apiToken,
             team: new pulumi.Config("vercel").require("team"),
         });
-        // Project Setup
-        const project = !projectId
-            ? new vercel.Project(
-                  `${nameTag}_project`,
-                  {
-                      name: tag,
-                      framework: "nextjs",
-                      gitRepository: {
-                          repo: githubRepo,
-                          type: "github",
-                      },
-                  },
-                  { provider },
-              )
-            : null;
+
         // Create Environment Variables
         [
             ...(environmentVariables ?? []),
@@ -56,7 +42,7 @@ export const VercelDeploymentFactory =
             new vercel.ProjectEnvironmentVariable(
                 `${nameTag}_environmentVar_${variable.key}`,
                 {
-                    projectId: project?.id ?? projectId!,
+                    projectId: projectId,
                     key: variable.key,
                     value: variable.value,
                     targets: [
@@ -78,7 +64,7 @@ export const VercelDeploymentFactory =
         const deployment = new vercel.Deployment(
             `${nameTag}_deployment`,
             {
-                projectId: project?.id ?? projectId!,
+                projectId: projectId,
                 production: pulumi.getStack() === "prod" ? true : false,
                 ref: pulumi.getStack(),
             },
@@ -99,7 +85,7 @@ export const VercelDeploymentFactory =
                 `${nameTag}_domain`,
                 {
                     domain: domainName,
-                    projectId: project?.id ?? projectId!,
+                    projectId: projectId,
                 },
                 { provider },
             );
@@ -117,7 +103,7 @@ export const VercelDeploymentFactory =
                 `${nameTag}_domain`,
                 {
                     domain: domainName,
-                    projectId: project?.id ?? projectId!,
+                    projectId: projectId,
                 },
                 { provider },
             );
