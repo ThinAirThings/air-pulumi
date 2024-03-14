@@ -89,13 +89,13 @@ export const VercelDeploymentFactory =
             //     },
             //     { provider },
             // );
-            new aws.route53.Record(`${nameTag}_ARecord`, {
-                zoneId: zone.zoneId,
-                name: domainName,
-                type: "A",
-                ttl: 300,
-                records: ["76.76.21.21"], // This works for all vercel deployments
-            });
+            // new aws.route53.Record(`${nameTag}_ARecord`, {
+            //     zoneId: zone.zoneId,
+            //     name: domainName,
+            //     type: "A",
+            //     ttl: 300,
+            //     records: ["76.76.21.21"], // This works for all vercel deployments
+            // });
         } else {
             // Create Sub-domain
             const domainName = `${pulumi.getStack()}.dev.${new pulumi.Config().require("rootDomain")}`;
@@ -107,13 +107,13 @@ export const VercelDeploymentFactory =
             //     },
             //     { provider },
             // );
-            new aws.route53.Record(`${nameTag}_CNAMERecord`, {
-                zoneId: zone.zoneId,
-                name: domainName,
-                type: "CNAME",
-                ttl: 300,
-                records: ["cname.vercel-dns.com"],
-            });
+            // new aws.route53.Record(`${nameTag}_CNAMERecord`, {
+            //     zoneId: zone.zoneId,
+            //     name: domainName,
+            //     type: "CNAME",
+            //     ttl: 300,
+            //     records: ["cname.vercel-dns.com"],
+            // });
         }
         return {
             deployment,
