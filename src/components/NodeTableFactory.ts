@@ -33,6 +33,11 @@ export const NodeTableFactory = (
         name: "nodeId",
         type: "S"
     }],
+    globalSecondaryIndexes: [{
+        name: "nodeId",
+        hashKey: "nodeId",
+        projectionType: "ALL"
+    }],
     streamEnabled,
     streamViewType
 })
