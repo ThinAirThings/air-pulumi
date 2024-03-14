@@ -1,6 +1,6 @@
 {
     "name": "@thinairthings/air-pulumi",
-    "version": "0.1.159",
+    "version": "0.1.160",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
