@@ -100,7 +100,7 @@ export const PyLambdaImageFactory =
                                     "Action": [
                                         "sqs:*"
                                     ],
-                                    Resource: arn
+                                    Resource: "*"
                                 }
                             ],
                         }),
