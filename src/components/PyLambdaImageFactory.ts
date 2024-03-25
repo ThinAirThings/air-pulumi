@@ -95,6 +95,13 @@ export const PyLambdaImageFactory =
                                     Action: ["lambda:InvokeFunction"],
                                     Resource: arn,
                                 },
+                                {
+                                    Effect: "Allow",
+                                    "Action": [
+                                        "sqs:*"
+                                    ],
+                                    Resource: arn
+                                }
                             ],
                         }),
                     ),
