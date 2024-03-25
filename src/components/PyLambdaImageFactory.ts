@@ -42,7 +42,7 @@ export const PyLambdaImageFactory =
                 role: lambdaRole,
                 policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
             })
-            new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_policy_attachment`, {
+            new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_sqs_policy_attachment`, {
                 role: lambdaRole,
                 policyArn: aws.iam.ManagedPolicy.AWSLambdaSQSQueueExecutionRole,
             })
