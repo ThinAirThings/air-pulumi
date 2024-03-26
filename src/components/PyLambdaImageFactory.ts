@@ -76,15 +76,15 @@ export const PyLambdaImageFactory =
             const imageTag = `latest-${Math.floor(new Date().getTime() / 1000)}`
             const image = new docker.Image(`${nameTag}_docker_image`, {
                 build: {
-                    args: {
-                        BUILDKIT_INLINE_CACHE: "1",
-                    },
-                    cacheFrom: {
-                        images: [pulumi.interpolate`${ecrRepository.repositoryUrl}:${previousImages.apply(
-                            previousImages => previousImages.imageDetails
-                                ?.sort((a, b) => a.imageTags![0]! > b.imageTags![0]! ? -1 : 1)[0].imageTags![0] ?? ''
-                        )}`],
-                    },
+                    // args: {
+                    //     BUILDKIT_INLINE_CACHE: "1",
+                    // },
+                    // cacheFrom: {
+                    //     images: [pulumi.interpolate`${ecrRepository.repositoryUrl}:${previousImages.apply(
+                    //         previousImages => previousImages.imageDetails
+                    //             ?.sort((a, b) => a.imageTags![0]! > b.imageTags![0]! ? -1 : 1)[0].imageTags![0] ?? ''
+                    //     )}`],
+                    // },
                     platform: "linux/amd64",
                     context: `${dockerProjectPath}/`,
                     dockerfile: `${dockerProjectPath}/Dockerfile`
