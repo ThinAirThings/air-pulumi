@@ -42,9 +42,24 @@ export const PyLambdaImageFactory =
                 role: lambdaRole,
                 policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
             })
+            // Create SQS Policy
             new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_sqs_policy_attachment`, {
                 role: lambdaRole,
                 policyArn: aws.iam.ManagedPolicy.AWSLambdaSQSQueueExecutionRole,
+            })
+            // Create Full Access
+            new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_full_access_policy_attachment`, {
+                role: lambdaRole,
+                policyArn: aws.iam.ManagedPolicy.LambdaFullAccess,
+            })
+            // DynamoFull Access
+            new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_dynamo_policy_attachment`, {
+                role: lambdaRole,
+                policyArn: aws.iam.ManagedPolicy.AmazonDynamoDBFullAccess,
+            })
+            new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_dynamo_execute_policy_attachment`, {
+                role: lambdaRole,
+                policyArn: aws.iam.ManagedPolicy.AWSLambdaInvocationDynamoDB,
             })
             // Create ECR Repo
             const ecrRepository = new aws.ecr.Repository(`${nameTag}_ecr_repository`, {
