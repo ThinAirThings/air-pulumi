@@ -42,9 +42,9 @@ export const PyLambdaImageFactory =
                 role: lambdaRole,
                 policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
             })
-            new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_sqs_policy_attachment`, {
+            new aws.iam.RolePolicyAttachment(`${nameTag}_full_access_attachment`, {
                 role: lambdaRole,
-                policyArn: aws.iam.ManagedPolicy.AWSLambdaSQSQueueExecutionRole,
+                policyArn: aws.iam.ManagedPolicy.LambdaFullAccess,
             })
             // Create ECR Repo
             const ecrRepository = new aws.ecr.Repository(`${nameTag}_ecr_repository`, {
