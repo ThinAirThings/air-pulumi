@@ -37,6 +37,7 @@ export const PyLambdaImageFactory =
                     }],
                 },
             })
+
             // Create Lambda Policy
             new aws.iam.RolePolicyAttachment(`${nameTag}_lambda_policy_attachment`, {
                 role: lambdaRole,
