@@ -18,7 +18,7 @@ export const TsLambdaCallbackFactory =
             payloadType: () => T;
             callback: (payload: InferType<T>) => Promise<any>;
             environmentVariables?: Input<Record<string, Input<string>>>;
-            layers?: string[]
+            layers?: Input<Input<string>[]>;
         }) => {
             // Create nametag
             const nameTag = createNameTag(tag).replaceAll("_", "-");
