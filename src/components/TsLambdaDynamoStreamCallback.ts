@@ -10,10 +10,12 @@ export const TsLambdaDynamoStreamCallback = <T extends Record<string, any>>({
     tag,
     callback,
     environmentVariables,
+    layers,
 }: {
     tag: string;
     callback: (payload: T) => Promise<any>;
     environmentVariables?: Input<Record<string, Input<string>>>;
+    layers?: Input<Input<string>[]>
 }) => {
     // Create nametag
     const nameTag = createNameTag(tag).replaceAll("_", "-");
@@ -27,6 +29,7 @@ export const TsLambdaDynamoStreamCallback = <T extends Record<string, any>>({
                 ...environmentVariables,
             },
         },
+        layers: layers,
         callback: async (event: DynamoDBStreamEvent) => {
             if (!event.Records[0]?.dynamodb?.NewImage) {
                 return;
