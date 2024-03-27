@@ -68,10 +68,10 @@ export const PyLambdaImageFactory =
             const authToken = aws.ecr.getAuthorizationTokenOutput({
                 registryId: ecrRepository.registryId,
             });
-            // Get previous image information
-            const previousImages = pulumi.output(new ECRClient({ region: "us-east-1" }).send(new DescribeImagesCommand({
-                repositoryName: 'grantgraph-danl-search_ecr_repository-230676b'
-            })));
+            // // Get previous image information
+            // const previousImages = pulumi.output(new ECRClient({ region: "us-east-1" }).send(new DescribeImagesCommand({
+            //     repositoryName: 'grantgraph-danl-search_ecr_repository-230676b'
+            // })));
             // Create Docker Image
             const imageTag = `latest-${Math.floor(new Date().getTime() / 1000)}`
             const image = new docker.Image(`${nameTag}_docker_image`, {
