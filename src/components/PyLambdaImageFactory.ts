@@ -2,7 +2,7 @@ import * as aws from "@pulumi/aws";
 import { createNameTag } from "../utils/createNameTag";
 import * as docker from "@pulumi/docker";
 import * as pulumi from "@pulumi/pulumi";
-
+import { DescribeImagesCommand, ECRClient } from "@aws-sdk/client-ecr";
 
 export const PyLambdaImageFactory =
     (applicationIamUser: aws.iam.User) =>
@@ -68,7 +68,10 @@ export const PyLambdaImageFactory =
             const authToken = aws.ecr.getAuthorizationTokenOutput({
                 registryId: ecrRepository.registryId,
             });
-
+            // Get previous image information
+            const previousImages = pulumi.output(new ECRClient({ region: "us-east-1" }).send(new DescribeImagesCommand({
+                repositoryName: 'grantgraph-danl-search_ecr_repository-230676b'
+            })));
             // Create Docker Image
             const imageTag = `latest-${Math.floor(new Date().getTime() / 1000)}`
             const image = new docker.Image(`${nameTag}_docker_image`, {
@@ -77,7 +80,10 @@ export const PyLambdaImageFactory =
                     //     BUILDKIT_INLINE_CACHE: "1",
                     // },
                     // cacheFrom: {
-                    //     images: [pulumi.interpolate`${ecrRepository.repositoryUrl}:latest`],
+                    //     images: [pulumi.interpolate`${ecrRepository.repositoryUrl}:${previousImages.apply(
+                    //         previousImages => previousImages.imageDetails
+                    //             ?.sort((a, b) => a.imageTags![0]! > b.imageTags![0]! ? -1 : 1)[0].imageTags![0] ?? ''
+                    //     )}`],
                     // },
                     platform: "linux/amd64",
                     context: `${dockerProjectPath}/`,
