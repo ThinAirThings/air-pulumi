@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GrantGraph/types.git"
+    "url": "git+https://github.com/thinairthings/air-pulumi.git"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
