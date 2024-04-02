@@ -1,6 +1,5 @@
 import * as aws from "@pulumi/aws";
 import { createNameTag } from "../utils/createNameTag";
-import { TableArgs } from "@pulumi/aws/dynamodb";
 
 export const DynamoTableFactory =
     (applicationIamUser: aws.iam.User) =>
