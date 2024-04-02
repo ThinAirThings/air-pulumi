@@ -1,3 +1,10 @@
+## [2.2.4](https://github.com/thinairthings/air-pulumi/compare/v2.2.3...v2.2.4) (2024-04-02)
+
+
+### Bug Fixes
+
+* **parselambdaevent:** fix key map on variables schema ([f5c2aa9](https://github.com/thinairthings/air-pulumi/commit/f5c2aa9148cf1ab34c813ff3b7bdb9302b211914))
+
 ## [2.2.3](https://github.com/thinairthings/air-pulumi/compare/v2.2.2...v2.2.3) (2024-04-02)
 
 
