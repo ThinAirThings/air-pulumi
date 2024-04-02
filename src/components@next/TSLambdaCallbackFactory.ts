@@ -18,7 +18,9 @@ export const TSLambdaCallbackFactory = <
     payloadType: () => P
     callback: (payload: (TypeOf<P> & TypeOf<E>)) => Promise<any>;
 }) => (...args: E extends ZodVoid ? [] : [{
-    stackVariables: pulumi.Input<TypeOf<E>>
+    stackVariables: {
+        [K in keyof TypeOf<E>]: pulumi.Output<TypeOf<E>[K]>
+    }
 }]) => {
         const lambda = new aws.lambda.CallbackFunction(`${fnName}-lambda`, {
             runtime: aws.lambda.Runtime.NodeJS20dX,
@@ -64,5 +66,11 @@ const fn = TSLambdaCallbackFactory({
                 payload
             })
         }
+    }
+})
+
+fn({
+    stackVariables: {
+        test2: "test" as unknown as pulumi.Output<string>
     }
 })
