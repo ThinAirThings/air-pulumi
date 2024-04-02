@@ -26,8 +26,8 @@
     "@types/node": "20.6.3",
     "cz-conventional-changelog": "^3.3.0",
     "semantic-release": "^23.0.6",
-    "tsup": "^7.2.0",
-    "typescript": "~5.2.2"
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3"
   },
   "peerDependencies": {
     "@pulumi/aws": "^6.0.0",
