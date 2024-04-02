@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/thinairthings/air-pulumi/compare/v2.1.2...v2.1.3) (2024-04-02)
+
+
+### Bug Fixes
+
+* **tslambdacallbackfactory:** fix payloadType argument to be a function for pulumi serialization ([dc7eb60](https://github.com/thinairthings/air-pulumi/commit/dc7eb60922a51caa4ae21c88f2c61cd93c402988))
+
 ## [2.1.2](https://github.com/thinairthings/air-pulumi/compare/v2.1.1...v2.1.2) (2024-04-02)
 
 
