@@ -3,9 +3,13 @@ import * as aws from "@pulumi/aws";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { validatedCallback } from "../utils/validatedCallback";
 import * as pulumi from "@pulumi/pulumi";
+import { parseLambdaEvent } from "../utils@next/parseLamdbaEvent";
+
+
+
 
 export const TSLambdaCallbackFactory = <
-    P extends ZodObject<any>,
+    P extends ZodObject<any> | ZodVoid = ZodVoid,
     E extends ZodObject<any> | ZodVoid = ZodVoid
 >({
     fnName,
@@ -15,7 +19,7 @@ export const TSLambdaCallbackFactory = <
 }: {
     fnName: string;
     stackVariablesType?: () => E;
-    payloadType: () => P
+    payloadType?: () => P
     callback: (payload: (TypeOf<P> & TypeOf<E>)) => Promise<any>;
 }) => (...args: E extends ZodVoid ? [] : [{
     stackVariables: {
@@ -38,10 +42,10 @@ export const TSLambdaCallbackFactory = <
                 },
             },
             callback: async (event: APIGatewayProxyEvent) => {
-                return validatedCallback(
+                return parseLambdaEvent(
                     event,
-                    payloadType(),
-                    stackVariablesType?.() as undefined | ZodObject<any>,
+                    payloadType?.() ?? z.void(),
+                    stackVariablesType?.() ?? z.void(),
                     callback
                 );
             }
