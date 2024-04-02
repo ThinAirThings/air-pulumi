@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/thinairthings/air-pulumi/compare/v1.1.0...v2.0.0) (2024-04-02)
+
+
+### Features
+
+* initial commit ([4196f36](https://github.com/thinairthings/air-pulumi/commit/4196f3635545de79a82b8fa4577164e76b4a6311))
+
+
+### BREAKING CHANGES
+
+* Fundamentally changed the way the library is designed to work
+
 # [1.1.0](https://github.com/thinairthings/air-pulumi/compare/v1.0.1...v1.1.0) (2024-04-02)
 
 
