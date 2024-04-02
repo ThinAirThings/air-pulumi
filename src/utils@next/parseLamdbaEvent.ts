@@ -1,18 +1,17 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { ZodType, TypeOf, ZodObject, ZodVoid, z } from "zod";
+import { ZodType, TypeOf, ZodObject, ZodVoid, z, ZodString } from "zod";
 
 
 
 export const parseLambdaEvent = async <
     P extends ZodObject<any> | ZodVoid,
-    E extends ZodObject<any> | ZodVoid
+    E extends ZodObject<Record<string, ZodString>> | ZodVoid
 >(
     event: APIGatewayProxyEvent,
     payloadSchema: P,
     stackVariablesSchema: E,
     callback: (payload: TypeOf<P> & TypeOf<E>) => Promise<any>,
 ) => {
-
     const result = z.object({})
         .merge(stackVariablesSchema instanceof ZodVoid ? z.object({}) : stackVariablesSchema)
         .merge(payloadSchema instanceof ZodVoid ? z.object({}) : payloadSchema)

@@ -1,4 +1,4 @@
-import { ZodType, TypeOf, z, ZodVoid, ZodObject } from "zod";
+import { ZodType, TypeOf, z, ZodVoid, ZodObject, ZodString } from "zod";
 import * as aws from "@pulumi/aws";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { validatedCallback } from "../utils/validatedCallback";
@@ -10,7 +10,7 @@ import { parseLambdaEvent } from "../utils@next/parseLamdbaEvent";
 
 export const TSLambdaCallbackFactory = <
     P extends ZodObject<any> | ZodVoid = ZodVoid,
-    E extends ZodObject<any> | ZodVoid = ZodVoid
+    E extends ZodObject<Record<string, ZodString>> | ZodVoid = ZodVoid
 >({
     fnName,
     stackVariablesType,
