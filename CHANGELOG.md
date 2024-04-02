@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/thinairthings/air-pulumi/compare/v1.0.1...v1.1.0) (2024-04-02)
+
+
+### Features
+
+* initial commit ([a0ba442](https://github.com/thinairthings/air-pulumi/commit/a0ba4427e8a4982f1e94df6c2e89bccc8ad08fe7))
+
 ## [1.0.1](https://github.com/thinairthings/air-pulumi/compare/v1.0.0...v1.0.1) (2024-04-02)
 
 
