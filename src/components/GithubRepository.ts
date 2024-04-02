@@ -1,13 +1,24 @@
 import * as github from "@pulumi/github";
-import * as pulumi from "@pulumi/pulumi";
-
 
 export const GitHubRepository = ({
     repositoryName,
-    branches
+    description,
+    branchNames
 }: {
     repositoryName: string;
-    branches: string[];
+    description: string;
+    branchNames?: string[];
 }) => {
-
+    const repository = new github.Repository(repositoryName, {
+        name: repositoryName,
+        description
+    });
+    const branches = branchNames?.map(branchName => new github.Branch(`${repositoryName}-${branchName}`, {
+        repository: repository.name,
+        branch: branchName
+    }))
+    return {
+        repository,
+        branches
+    }
 }
