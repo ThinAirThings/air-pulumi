@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/thinairthings/air-pulumi/compare/v2.2.2...v2.2.3) (2024-04-02)
+
+
+### Bug Fixes
+
+* **parselambdaevent:** update zod type checking ([439aff5](https://github.com/thinairthings/air-pulumi/commit/439aff57a0a08a3b221a456bb1e246eea9c9ed61))
+
 ## [2.2.2](https://github.com/thinairthings/air-pulumi/compare/v2.2.1...v2.2.2) (2024-04-02)
 
 
