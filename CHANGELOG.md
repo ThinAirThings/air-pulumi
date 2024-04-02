@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/thinairthings/air-pulumi/compare/v2.2.0...v2.2.1) (2024-04-02)
+
+
+### Bug Fixes
+
+* **tslambdacallbackfactory:** fixed types ([b7f8590](https://github.com/thinairthings/air-pulumi/commit/b7f8590e96c90f5ee0a6e26e83bfb03743981004))
+
 # [2.2.0](https://github.com/thinairthings/air-pulumi/compare/v2.1.3...v2.2.0) (2024-04-02)
 
 
