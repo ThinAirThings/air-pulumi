@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/thinairthings/air-pulumi/compare/v2.1.1...v2.1.2) (2024-04-02)
+
+
+### Bug Fixes
+
+* **tslambdacallbackfactory:** fix types. Changed infer from zod to TypeOf ([d5e678a](https://github.com/thinairthings/air-pulumi/commit/d5e678a71155ff728e1d7b696f7fb618e228a880))
+
 ## [2.1.1](https://github.com/thinairthings/air-pulumi/compare/v2.1.0...v2.1.1) (2024-04-02)
 
 
