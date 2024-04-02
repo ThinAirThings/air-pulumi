@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/thinairthings/air-pulumi/compare/v2.1.3...v2.2.0) (2024-04-02)
+
+
+### Features
+
+* **tslambdacallbackfactory:** add implicit passing of stack variables ([f92535f](https://github.com/thinairthings/air-pulumi/commit/f92535f8958601d731d9a10fc85c8dfa96114ac8))
+
 ## [2.1.3](https://github.com/thinairthings/air-pulumi/compare/v2.1.2...v2.1.3) (2024-04-02)
 
 
