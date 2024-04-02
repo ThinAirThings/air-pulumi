@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/thinairthings/air-pulumi/compare/v2.0.0...v2.1.0) (2024-04-02)
+
+
+### Features
+
+* **tslambdacallbackfactory:** add function ([226ce1f](https://github.com/thinairthings/air-pulumi/commit/226ce1fa879c5639eb844f7142162255f6e9369c))
+
 # [2.0.0](https://github.com/thinairthings/air-pulumi/compare/v1.1.0...v2.0.0) (2024-04-02)
 
 
