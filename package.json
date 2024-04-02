@@ -42,13 +42,19 @@
   "dependencies": {
     "@aws-sdk/client-ecr": "^3.540.0",
     "@aws-sdk/util-dynamodb": "^3.529.1",
+    "@pulumi/github": "^6.2.0",
     "@thinairthings/air-dynamodb": "^0.1.15",
     "@thinairthings/air-graph": "^0.1.24",
     "zod": "^3.22.4"
   },
   "release": {
     "branches": [
-      "main"
+      "main",
+      "next",
+      {
+        "name": "beta",
+        "prerelease": true
+      }
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
