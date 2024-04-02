@@ -16,7 +16,7 @@ export const TSLambdaCallbackFactory = <
 }: {
     fnName: string;
     environmentVariables?: E;
-    payloadType: P
+    payloadType: () => P
     callback: (payload: TypeOf<P>) => Promise<any>;
 }) => (...args: E extends ZodVoid ? [] : [{
     environmentVariables: TypeOf<E>
@@ -37,7 +37,7 @@ export const TSLambdaCallbackFactory = <
                 },
             },
             callback: async (event: APIGatewayProxyEvent) => {
-                return validatedCallback(event, payloadType, callback);
+                return validatedCallback(event, payloadType(), callback);
             }
         })
         return lambda;
