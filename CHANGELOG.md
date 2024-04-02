@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/thinairthings/air-pulumi/compare/v2.2.1...v2.2.2) (2024-04-02)
+
+
+### Bug Fixes
+
+* **tslambdacallbackfactory:** fix stackVariables type ([99ef1ea](https://github.com/thinairthings/air-pulumi/commit/99ef1ea4cca982ba917d8e67a3044c98ad120800))
+
 ## [2.2.1](https://github.com/thinairthings/air-pulumi/compare/v2.2.0...v2.2.1) (2024-04-02)
 
 
