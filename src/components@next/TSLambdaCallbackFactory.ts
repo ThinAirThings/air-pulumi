@@ -4,7 +4,6 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 import { validatedCallback } from "../utils/validatedCallback";
 import * as pulumi from "@pulumi/pulumi";
 
-
 export const TSLambdaCallbackFactory = <
     P extends ZodObject<any>,
     E extends ZodObject<any> | ZodVoid = ZodVoid
@@ -17,9 +16,9 @@ export const TSLambdaCallbackFactory = <
     fnName: string;
     stackVariablesType?: () => E;
     payloadType: () => P
-    callback: (payload: TypeOf<P>) => Promise<any>;
+    callback: (payload: (TypeOf<P> & TypeOf<E>)) => Promise<any>;
 }) => (...args: E extends ZodVoid ? [] : [{
-    stackVariables: TypeOf<E>
+    stackVariables: pulumi.Input<TypeOf<E>>
 }]) => {
         const lambda = new aws.lambda.CallbackFunction(`${fnName}-lambda`, {
             runtime: aws.lambda.Runtime.NodeJS20dX,
@@ -48,3 +47,22 @@ export const TSLambdaCallbackFactory = <
         return lambda;
     }
 
+
+const fn = TSLambdaCallbackFactory({
+    fnName: "test",
+    payloadType: () => z.object({
+        test: z.string()
+    }),
+    stackVariablesType: () => z.object({
+        test2: z.string()
+    }),
+    callback: async (payload) => {
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: "Hello from lambda",
+                payload
+            })
+        }
+    }
+})
