@@ -18,7 +18,7 @@ export const parseLambdaEvent = async <
         .merge(payloadSchema instanceof ZodVoid ? z.object({}) : payloadSchema)
         .safeParse({
             ...(stackVariablesSchema instanceof ZodObject
-                ? Object.fromEntries(Object.keys(stackVariablesSchema.shape).map(([key]) => [key, process.env[key]]))
+                ? Object.fromEntries(Object.keys(stackVariablesSchema.shape).map((key) => [key, process.env[key]]))
                 : {}
             ),
             ...event.pathParameters,
