@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/thinairthings/air-pulumi/compare/v1.0.0...v1.0.1) (2024-04-02)
+
+
+### Bug Fixes
+
+* **.github/workflows:** add branch [next, beta] to workflows ([cc64cb6](https://github.com/thinairthings/air-pulumi/commit/cc64cb6823b108a07d27bc2eb508e82cff928811))
+* **release:** test release for next ([32f6a33](https://github.com/thinairthings/air-pulumi/commit/32f6a330d6bd4336d572d2288178b8e9758a2670))
+
 # 1.0.0 (2024-04-01)
 
 
