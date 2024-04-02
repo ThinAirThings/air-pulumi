@@ -1,23 +1,30 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { ZodType, infer as InferType } from "zod";
+import { ZodType, infer as InferType, ZodObject, ZodVoid } from "zod";
 
-export const validatedCallback = async <T extends ZodType>(
+export const validatedCallback = async <
+    P extends ZodObject<any>,
+    E extends ZodObject<any> | undefined
+>(
     event: APIGatewayProxyEvent,
-    schema: T,
-    callback: (payload: InferType<T>) => Promise<any>,
+    payloadSchema: P,
+    stackVariablesSchema: E,
+    callback: (payload: InferType<P>) => Promise<any>,
 ) => {
-    console.log(event)
-    const result = schema.safeParse({
+
+    const result = payloadSchema.safeParse({
+        ...(typeof stackVariablesSchema !== "undefined"
+            ? Object.fromEntries(Object.keys(stackVariablesSchema.shape).map(([key]) => [key, process.env[key]]))
+            : {}
+        ),
         ...event.pathParameters,
         ...event.queryStringParameters,
         ...(!!event.body
             ? event.isBase64Encoded
                 ? JSON.parse(
-                      Buffer.from(event.body, "base64").toString("utf-8"),
-                  )
+                    Buffer.from(event.body, "base64").toString("utf-8"),
+                )
                 : JSON.parse(event.body)
             : {}),
-        // Check for directly invoked function
         ...(!!!event.requestContext && !!!event.path ? event : {}),
     });
     if (!result.success) {

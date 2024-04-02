@@ -1,4 +1,4 @@
-import { ZodType, TypeOf, z, ZodVoid } from "zod";
+import { ZodType, TypeOf, z, ZodVoid, ZodObject } from "zod";
 import * as aws from "@pulumi/aws";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { validatedCallback } from "../utils/validatedCallback";
@@ -6,20 +6,20 @@ import * as pulumi from "@pulumi/pulumi";
 
 
 export const TSLambdaCallbackFactory = <
-    P extends ZodType,
-    E extends ZodType = ZodVoid
+    P extends ZodObject<any>,
+    E extends ZodObject<any> | ZodVoid = ZodVoid
 >({
     fnName,
-    environmentVariables,
+    stackVariablesType,
     payloadType,
     callback
 }: {
     fnName: string;
-    environmentVariables?: E;
+    stackVariablesType?: () => E;
     payloadType: () => P
     callback: (payload: TypeOf<P>) => Promise<any>;
 }) => (...args: E extends ZodVoid ? [] : [{
-    environmentVariables: TypeOf<E>
+    stackVariables: TypeOf<E>
 }]) => {
         const lambda = new aws.lambda.CallbackFunction(`${fnName}-lambda`, {
             runtime: aws.lambda.Runtime.NodeJS20dX,
@@ -33,11 +33,16 @@ export const TSLambdaCallbackFactory = <
             },
             environment: {
                 variables: {
-                    ...args?.[0]?.environmentVariables ?? {},
+                    ...args?.[0]?.stackVariables ?? {},
                 },
             },
             callback: async (event: APIGatewayProxyEvent) => {
-                return validatedCallback(event, payloadType(), callback);
+                return validatedCallback(
+                    event,
+                    payloadType(),
+                    stackVariablesType?.() as undefined | ZodObject<any>,
+                    callback
+                );
             }
         })
         return lambda;
