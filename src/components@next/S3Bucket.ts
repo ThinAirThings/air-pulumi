@@ -1,15 +1,19 @@
 import * as aws from "@pulumi/aws";
 import { createTags } from "../utils@next/createTags";
+import { ConstructParameters } from "../types/ConstructParameters";
+
 
 export const S3Bucket = ({
     name,
-    iamUser
-}: {
+    iamUser,
+    ...props
+}: ConstructParameters<typeof aws.s3.Bucket, {
     name: string;
     iamUser?: aws.iam.User;
-}) => {
+}>) => {
     const bucket = new aws.s3.Bucket(name, {
-        tags: createTags(name)
+        tags: createTags(name),
+        ...props
     })
     if (!iamUser) return bucket
     new aws.iam.UserPolicyAttachment(`${name}_policy_attachment`, {
