@@ -4,14 +4,12 @@ import { createTags } from "../utils@next/createTags";
 
 export const IamUser = ({
     name,
-    target
 }: {
     name: string;
-    target: string;
 }) => {
     // Create IAM User
     const iamUser = new aws.iam.User(name, {
-        path: `/${pulumi.getProject()}/${pulumi.getStack()}/${target}/`,
+        path: `/${pulumi.getProject()}/${pulumi.getStack()}/${name}/`,
         tags: createTags(name)
     });
     // Create Access Key
