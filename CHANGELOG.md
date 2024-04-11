@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/thinairthings/air-pulumi/compare/v2.2.5...v2.3.0) (2024-04-11)
+
+
+### Features
+
+* **IamUser:** add IamUser component ([1d2e5e4](https://github.com/thinairthings/air-pulumi/commit/1d2e5e42ecfd809a296838332b055a2f51af5709))
+
 ## [2.2.5](https://github.com/thinairthings/air-pulumi/compare/v2.2.4...v2.2.5) (2024-04-02)
 
 
