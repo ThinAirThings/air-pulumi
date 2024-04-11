@@ -1,3 +1,10 @@
+## [2.4.2](https://github.com/thinairthings/air-pulumi/compare/v2.4.1...v2.4.2) (2024-04-11)
+
+
+### Bug Fixes
+
+* add S3Bucket component to index export ([91b3438](https://github.com/thinairthings/air-pulumi/commit/91b3438661cef14a96e2059bd39497dbc8a73ffd))
+
 ## [2.4.1](https://github.com/thinairthings/air-pulumi/compare/v2.4.0...v2.4.1) (2024-04-11)
 
 
