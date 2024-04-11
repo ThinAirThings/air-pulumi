@@ -1,3 +1,10 @@
+## [2.4.1](https://github.com/thinairthings/air-pulumi/compare/v2.4.0...v2.4.1) (2024-04-11)
+
+
+### Bug Fixes
+
+* remove target property from IamUser ([eab2c5f](https://github.com/thinairthings/air-pulumi/commit/eab2c5f8b7959c257972968fe80490afbdfb3362))
+
 # [2.4.0](https://github.com/thinairthings/air-pulumi/compare/v2.3.0...v2.4.0) (2024-04-11)
 
 
