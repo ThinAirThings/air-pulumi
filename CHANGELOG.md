@@ -1,3 +1,10 @@
+## [2.4.4](https://github.com/thinairthings/air-pulumi/compare/v2.4.3...v2.4.4) (2024-04-11)
+
+
+### Bug Fixes
+
+* **types:** update types to override pulumi construct types ([1e497ef](https://github.com/thinairthings/air-pulumi/commit/1e497efdd94da11a17fc205ebad82b1a8c073571))
+
 ## [2.4.3](https://github.com/thinairthings/air-pulumi/compare/v2.4.2...v2.4.3) (2024-04-11)
 
 
