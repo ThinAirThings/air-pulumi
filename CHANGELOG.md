@@ -1,3 +1,10 @@
+## [2.4.3](https://github.com/thinairthings/air-pulumi/compare/v2.4.2...v2.4.3) (2024-04-11)
+
+
+### Bug Fixes
+
+* remove inline test code ([a43151b](https://github.com/thinairthings/air-pulumi/commit/a43151bda68fa463dba856d2b61e9ce2293900a7))
+
 ## [2.4.2](https://github.com/thinairthings/air-pulumi/compare/v2.4.1...v2.4.2) (2024-04-11)
 
 
