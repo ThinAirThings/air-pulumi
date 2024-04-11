@@ -14,11 +14,12 @@ export const configAirPulumi = () => {
     const iamUser = new aws.iam.User(createNameTag("iamUser"), {
         path: `/${pulumi.getProject()}/${pulumi.getStack()}/application/`,
     });
+
     // Create Access Key
     const accessKey = new aws.iam.AccessKey(createNameTag("accessKey"), {
         user: iamUser.name,
     });
-    
+
     const DynamoTable = DynamoTableFactory(iamUser);
     return {
         iamUser,

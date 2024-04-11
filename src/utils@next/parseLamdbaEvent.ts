@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { ZodType, TypeOf, ZodObject, ZodVoid, z, ZodString } from "zod";
+import { TypeOf, ZodObject, ZodVoid, z, ZodString } from "zod";
 
 
 

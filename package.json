@@ -7,8 +7,7 @@
     "build": "tsup",
     "npmpub": "npm run build && git add . && git commit -m \"mod\" && git push && npm version patch && npm publish --access public",
     "format": "npx prettier --write .",
-    "prepublishOnly": "npm run build",
-    "commit": "npx cz"
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist"
@@ -57,16 +56,30 @@
       }
     ],
     "plugins": [
-      "@semantic-release/commit-analyzer",
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "angular",
+          "releaseRules": [
+            {
+              "type": "docs",
+              "release": "patch"
+            },
+            {
+              "type": "build",
+              "release": "patch"
+            },
+            {
+              "type": "ci",
+              "release": "patch"
+            }
+          ]
+        }
+      ],
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
       "@semantic-release/npm",
       "@semantic-release/git"
     ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }
