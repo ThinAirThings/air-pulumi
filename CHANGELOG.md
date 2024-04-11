@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/thinairthings/air-pulumi/compare/v2.3.0...v2.4.0) (2024-04-11)
+
+
+### Features
+
+* **S3Bucket:** add S3Bucket component ([74aa174](https://github.com/thinairthings/air-pulumi/commit/74aa17440eedc17ad0afc4f18019f30179775e32))
+
 # [2.3.0](https://github.com/thinairthings/air-pulumi/compare/v2.2.5...v2.3.0) (2024-04-11)
 
 
