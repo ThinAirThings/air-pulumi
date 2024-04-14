@@ -1,3 +1,10 @@
+## [2.4.5](https://github.com/thinairthings/air-pulumi/compare/v2.4.4...v2.4.5) (2024-04-14)
+
+
+### Bug Fixes
+
+* **S3Bucket.ts:** add public access option ([ee0eb9e](https://github.com/thinairthings/air-pulumi/commit/ee0eb9e142a508de5f7e861632756585a716b8fe))
+
 ## [2.4.4](https://github.com/thinairthings/air-pulumi/compare/v2.4.3...v2.4.4) (2024-04-11)
 
 
