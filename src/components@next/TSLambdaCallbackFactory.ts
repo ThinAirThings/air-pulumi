@@ -21,36 +21,36 @@ export const TSLambdaCallbackFactory = <
     stackVariablesType?: () => E;
     payloadType?: () => P
     callback: (payload: (TypeOf<P> & TypeOf<E>)) => Promise<any>;
-}) => (...args: E extends ZodVoid ? [] : [{
+}, ...args: E extends ZodVoid ? [] : [{
     stackVariables: {
         [K in keyof TypeOf<E>]: pulumi.Output<TypeOf<E>[K]>
     }
 }]) => {
-        const lambda = new aws.lambda.CallbackFunction(`${fnName}-lambda`, {
-            runtime: aws.lambda.Runtime.NodeJS20dX,
-            timeout: 60 * 15,
-            memorySize: 10240,
-            tags: {
-                Name: fnName,
-                Organization: pulumi.getOrganization(),
-                Project: pulumi.getProject(),
-                Stack: pulumi.getStack(),
+    const lambda = new aws.lambda.CallbackFunction(`${fnName}-lambda`, {
+        runtime: aws.lambda.Runtime.NodeJS20dX,
+        timeout: 60 * 15,
+        memorySize: 10240,
+        tags: {
+            Name: fnName,
+            Organization: pulumi.getOrganization(),
+            Project: pulumi.getProject(),
+            Stack: pulumi.getStack(),
+        },
+        environment: {
+            variables: {
+                ...args?.[0]?.stackVariables ?? {},
             },
-            environment: {
-                variables: {
-                    ...args?.[0]?.stackVariables ?? {},
-                },
-            },
-            callback: async (event: APIGatewayProxyEvent) => {
-                return parseLambdaEvent(
-                    event,
-                    payloadType?.() ?? z.void(),
-                    stackVariablesType?.() ?? z.void(),
-                    callback
-                );
-            }
-        })
-        return lambda;
-    }
+        },
+        callback: async (event: APIGatewayProxyEvent) => {
+            return parseLambdaEvent(
+                event,
+                payloadType?.() ?? z.void(),
+                stackVariablesType?.() ?? z.void(),
+                callback
+            );
+        }
+    })
+    return lambda;
+}
 
 
