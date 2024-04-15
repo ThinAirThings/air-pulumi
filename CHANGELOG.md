@@ -1,3 +1,10 @@
+## [2.5.2](https://github.com/thinairthings/air-pulumi/compare/v2.5.1...v2.5.2) (2024-04-15)
+
+
+### Bug Fixes
+
+* **TSLambdaCallback:** rename ([51cfa07](https://github.com/thinairthings/air-pulumi/commit/51cfa071f4d6578956a1da1760b9e69afb3620f7))
+
 ## [2.5.1](https://github.com/thinairthings/air-pulumi/compare/v2.5.0...v2.5.1) (2024-04-15)
 
 
