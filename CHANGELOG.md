@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/thinairthings/air-pulumi/compare/v2.5.0...v2.5.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* **TSLambdaCallback:** fix interface ([24042e4](https://github.com/thinairthings/air-pulumi/commit/24042e4ca7125b154efdb1cb545e26fcc0cde455))
+
 # [2.5.0](https://github.com/thinairthings/air-pulumi/compare/v2.4.5...v2.5.0) (2024-04-15)
 
 
