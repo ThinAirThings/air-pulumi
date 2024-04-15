@@ -7,8 +7,7 @@ import { parseLambdaEvent } from "../utils@next/parseLamdbaEvent";
 
 
 
-
-export const TSLambdaCallbackFactory = <
+export const TSLambdaCallback = <
     P extends ZodObject<any> | ZodVoid = ZodVoid,
     E extends ZodObject<Record<string, ZodString>> | ZodVoid = ZodVoid
 >({
