@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/thinairthings/air-pulumi/compare/v2.4.5...v2.5.0) (2024-04-15)
+
+
+### Features
+
+* **RestAPI:** add rest api construct ([596c1f6](https://github.com/thinairthings/air-pulumi/commit/596c1f6ebcc16ee8c7ce9e97b1f719dbc4b166f2))
+
 ## [2.4.5](https://github.com/thinairthings/air-pulumi/compare/v2.4.4...v2.4.5) (2024-04-14)
 
 
