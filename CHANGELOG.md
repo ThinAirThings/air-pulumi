@@ -1,3 +1,10 @@
+## [2.7.1](https://github.com/thinairthings/air-pulumi/compare/v2.7.0...v2.7.1) (2024-04-18)
+
+
+### Bug Fixes
+
+* firstline trim ([6389fba](https://github.com/thinairthings/air-pulumi/commit/6389fba4921d63efaec062f70e7e7a98c69d7ace))
+
 # [2.7.0](https://github.com/thinairthings/air-pulumi/compare/v2.6.0...v2.7.0) (2024-04-18)
 
 
