@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/thinairthings/air-pulumi/compare/v2.6.0...v2.7.0) (2024-04-18)
+
+
+### Features
+
+* **utils:** add writeEnvFile ([526b119](https://github.com/thinairthings/air-pulumi/commit/526b119f8dda625624249801f3e956ba2d698d6c))
+
 # [2.6.0](https://github.com/thinairthings/air-pulumi/compare/v2.5.2...v2.6.0) (2024-04-15)
 
 
