@@ -41,7 +41,12 @@ export const parseLambdaEvent = async <
         };
     }
     try {
-        return await callback(result.data);
+        return {
+            headers: {
+                "Access-Control-Allow-Origin": event.headers['Origin'] || "*",
+            },
+            ...await callback(result.data)
+        };
     } catch (e) {
         const error = e as Error;
         return {

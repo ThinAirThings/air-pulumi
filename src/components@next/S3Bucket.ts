@@ -7,16 +7,25 @@ export const S3Bucket = ({
     name,
     iamUser,
     publicAccess = false,
+    corsRules,
     ...props
 }: ConstructParameters<typeof aws.s3.BucketV2, {
     name: string;
     iamUser?: aws.iam.User;
     publicAccess?: boolean;
+    corsRules?: ConstructorParameters<typeof aws.s3.BucketCorsConfigurationV2>[1]['corsRules'];
 }>) => {
-    const bucket = new aws.s3.BucketV2(name, {
+    const bucket = new aws.s3.BucketV2(`${pulumi.getOrganization()}-${pulumi.getStack()}-${name}`, {
         tags: createTags(name),
+        forceDestroy: pulumi.getStack() === 'prod' ? false : true,
         ...props
     })
+    if (corsRules) {
+        new aws.s3.BucketCorsConfigurationV2(`${name}_cors`, {
+            bucket: bucket.id,
+            corsRules
+        })
+    }
     if (publicAccess) {
         const publicAccessBlock = new aws.s3.BucketPublicAccessBlock(
             `${name}_publicAccessBlock`,
