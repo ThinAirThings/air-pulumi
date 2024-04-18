@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/thinairthings/air-pulumi/compare/v2.5.2...v2.6.0) (2024-04-15)
+
+
+### Features
+
+* **DynamoTable:** add dynamo table construct ([2795dd3](https://github.com/thinairthings/air-pulumi/commit/2795dd38a3fe17c97f66fb1c335d003502b36438))
+
 ## [2.5.2](https://github.com/thinairthings/air-pulumi/compare/v2.5.1...v2.5.2) (2024-04-15)
 
 
