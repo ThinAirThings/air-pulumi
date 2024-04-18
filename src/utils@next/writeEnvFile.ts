@@ -11,7 +11,7 @@ export const writeEnvFile = async (
     pulumi.all(Object.values(env))
         .apply((values): void => {
             writeFileSync(path.join(process.cwd(), '.env.out'), `
-            ${Object.keys(env).map((key, i) => `${key}=${values[i]}`).join('\n').trim()}
-        `)
+        ${Object.keys(env).map((key, i) => `${key}=${values[i]}`).join('\n').trim()}
+    `.trim())
         })
 }
