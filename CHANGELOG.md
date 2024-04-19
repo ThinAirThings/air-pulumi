@@ -1,3 +1,10 @@
+## [2.7.2](https://github.com/thinairthings/air-pulumi/compare/v2.7.1...v2.7.2) (2024-04-19)
+
+
+### Bug Fixes
+
+* **writeEnvFile:** fix output name ([c824b5d](https://github.com/thinairthings/air-pulumi/commit/c824b5d7275043882e76b965831d78892fdc5f0b))
+
 ## [2.7.1](https://github.com/thinairthings/air-pulumi/compare/v2.7.0...v2.7.1) (2024-04-18)
 
 
