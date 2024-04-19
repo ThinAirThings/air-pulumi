@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import { writeFile, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import path = require("path");
 
 
@@ -10,7 +10,7 @@ export const writeEnvFile = async (
 ) => {
     pulumi.all(Object.values(env))
         .apply((values): void => {
-            writeFileSync(path.join(process.cwd(), '.env.out'), `
+            writeFileSync(path.join(process.cwd(), `.env.${pulumi.getStack()}`), `
         ${Object.keys(env).map((key, i) => `${key}=${values[i]}`).join('\n').trim()}
     `.trim())
         })
